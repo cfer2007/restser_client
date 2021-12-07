@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "848857824564",
+    "project_id": "restserapp",
+    "storage_bucket": "restserapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848857824564:android:4bdb3b89df31d6aaf77961",
+        "android_client_info": {
+          "package_name": "com.cfer.restser_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848857824564-5baqhj9uhm32m07k9716bt6t776oc5bg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cfer.restser_client",
+            "certificate_hash": "7869517bbd0940fd8ab7516fdf3ddc1cd1be7860"
+          }
+        },
+        {
+          "client_id": "848857824564-s79t934fknjj7oq1rlk8l7i93nv9u6fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwoNSdlvQCCongj4bXaDxctoLfKBK1GD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848857824564-s79t934fknjj7oq1rlk8l7i93nv9u6fi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
