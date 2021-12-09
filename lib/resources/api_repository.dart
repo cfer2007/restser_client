@@ -1,5 +1,5 @@
-import 'package:restser_client/login/bloc/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signup_request_model.dart';
+import 'package:restser_client/login/model/firebase_signin_request_model.dart';
+import 'package:restser_client/login/model/firebase_signup_request_model.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/order/models/order_model.dart';
@@ -12,15 +12,15 @@ class ApiRepository {
   final _provider = ApiProvider();
 
   Future<APIResponse<Object>> signin(FirebaseSigninRequestModel user) {
-    return _provider.signin(user);
+    return _provider.firebaseSignin(user);
   }
 
   Future<APIResponse<Object>> firebaseSignup(FirebaseSignupRequestModel user) {
     return _provider.firebaseSignup(user);
   }
 
-  Future<APIResponse<Object>> getUserList(String idUser) {
-    return _provider.getUserList(idUser);
+  Future<APIResponse<Object>> getUserList(String uid) {
+    return _provider.getUserList(uid);
   }
 
   Future<APIResponse<Object>> getMenuList(int idRestaurante) {
@@ -56,16 +56,16 @@ class ApiRepository {
     return _provider.setOrder(order);
   }
 
-  Future<APIResponse<Object>> getOrderListByClient(String idUser) {
-    return _provider.getOrderListByClient(idUser);
+  Future<APIResponse<Object>> getOrderListByClient(String uid) {
+    return _provider.getOrderListByClient(uid);
   }
 
   Future<APIResponse<bool>> setDishesOrder(List<OrderDetailModel> dishes) {
     return _provider.setDishesOrder(dishes);
   }
 
-  Future<APIResponse<Object>> getContactList(String idUser) {
-    return _provider.getContactList(idUser);
+  Future<APIResponse<Object>> getContactList(String uid) {
+    return _provider.getContactList(uid);
   }
 
   Future<APIResponse<Object>> setContactList(List<ContactModel> list) {
@@ -80,8 +80,8 @@ class ApiRepository {
     return _provider.getAccountList(idReservation);
   }
 
-  Future<APIResponse<Object>> getAccountListByClient(int idUser) {
-    return _provider.getAccountListByClient(idUser);
+  Future<APIResponse<Object>> getAccountListByClient(int uid) {
+    return _provider.getAccountListByClient(uid);
   }
 }
 

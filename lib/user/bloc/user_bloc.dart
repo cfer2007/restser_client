@@ -21,7 +21,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (event is GetUserList) {
         {
           yield UserLoading();
-          final userList = await _apiRepository.getUserList(event.idUser);
+          final userList = await _apiRepository.getUserList(event.uid);
           if (userList.error) {
             yield UserError(userList.errorMessage as String);
           } else {

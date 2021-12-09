@@ -2,7 +2,7 @@ import '/resources/api_resources.dart';
 
 class ContactModel {
   int? idContact;
-  String? idUser;
+  String? uid;
   String? idFriend;
   String? email;
   String? username;
@@ -10,7 +10,7 @@ class ContactModel {
 
   ContactModel(
       {this.idContact,
-      this.idUser,
+      this.uid,
       this.idFriend,
       this.email,
       this.username,
@@ -18,15 +18,15 @@ class ContactModel {
 
   factory ContactModel.fromJson(Map<String, dynamic> json) => ContactModel(
         idContact: json['idContact'],
-        idUser: json['idUser'],
+        uid: json['uid'],
         idFriend: json['idFriend'],
         email: json['email'],
         username: json['username'],
       );
 
   Map<String, dynamic> toJson() => {
-        "user": {"idUser": idUser},
-        "friend": {"idUser": idFriend},
+        "user": {"uid": uid},
+        "friend": {"uid": idFriend},
         "date": APIResources.dateFormat.format(DateTime.now()),
       };
 }

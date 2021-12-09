@@ -70,7 +70,7 @@ class _ChooseTypeAccountScreenState extends State<ChooseTypeAccountScreen> {
                   ),
                   onPressed: () {
                     _contactBloc!.add(GetContactList(
-                        _accountBloc!.state.account!.user!.idUser!, true));
+                        _accountBloc!.state.account!.user!.uid!, true));
                   },
                 ),
                 const Padding(

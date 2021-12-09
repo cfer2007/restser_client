@@ -19,6 +19,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     try {
       if (event is ClearReservationBloc) yield ReservationInitial();
       if (event is SetReservation) {
+        print('setReservation');
         yield ReservationLoading();
         final res = await _apiRepository.setReservation(event.reservation);
         if (res.error) {

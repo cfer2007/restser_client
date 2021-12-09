@@ -1,9 +1,11 @@
+import 'package:restser_client/login/widgets/user_secure_storage.dart';
+
 import '/contact/models/contact_model.dart';
 import '/user/bloc/user_bloc.dart';
 import '/user/models/user_model.dart';
 import '/contact/bloc/contact_bloc.dart';
 import '/contact/widgets/contact_list.dart';
-import '/login/bloc/login_bloc.dart';
+//import '/login/bloc/login_bloc.dart';
 import '/resources/api_resources.dart';
 import '/widgets/my_appbar.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -24,15 +26,19 @@ class _ContactScreenState extends State<ContactScreen> {
   GlobalKey<AutoCompleteTextFieldState<UserModel>> key = GlobalKey();
   AutoCompleteTextField? searchTextField;
   TextEditingController controller = TextEditingController();
+  var uid;
 
   @override
   void initState() {
     _contactBloc = BlocProvider.of<ContactBloc>(context);
     _userBloc = BlocProvider.of<UserBloc>(context);
-    _userBloc!.add(
-        GetUserList(BlocProvider.of<LoginBloc>(context).state.loginUser!.uid!));
-
+    init();
     super.initState();
+  }
+
+  Future init() async {
+    uid = await UserSecureStorage().getUid();
+    _userBloc!.add(GetUserList(uid));
   }
 
   @override
@@ -67,13 +73,11 @@ class _ContactScreenState extends State<ContactScreen> {
           return _buildLoading();
         } else if (state is UserListLoaded) {
           if (_contactBloc!.state.contactList == null) {
-            _contactBloc!.add(GetContactList(
-                BlocProvider.of<LoginBloc>(context).state.loginUser!.uid!,
-                false));
+            _contactBloc!.add(GetContactList(uid,false));
           }
           return _buildClientCard();
         } else if (state is UserError) {
-          print(state.message);
+          //print(state.message);
           return Container();
         } else {
           return Container();
@@ -118,11 +122,8 @@ class _ContactScreenState extends State<ContactScreen> {
                     searchTextField!.textField.controller!.text = item.email!,
                     _contactBloc!.add(AddContact(ContactModel(
                       email: item.email,
-                      idUser: BlocProvider.of<LoginBloc>(context)
-                          .state
-                          .loginUser!
-                          .uid,
-                      idFriend: item.idUser,
+                      uid: uid,
+                      idFriend: item.uid,
                       username: item.name,
                       date: APIResources.dateFormat.format(DateTime.now()),
                     )))
@@ -141,7 +142,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       style: const TextStyle(fontSize: 16.0),
                     ),
                     const Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: EdgeInsets.all(15.0),
                     ),
                     Text(
                       item.name!,

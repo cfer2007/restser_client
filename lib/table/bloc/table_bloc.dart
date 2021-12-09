@@ -17,6 +17,7 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     if (event is GetTable) {
       try {
         yield const TableLoading();
+        print(event.idTable);
         final table = await _apiRepository.getTable(event.idTable);
         if (table.error) {
           yield TableError(table.errorMessage as String);

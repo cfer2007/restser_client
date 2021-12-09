@@ -39,8 +39,8 @@ class DeleteAccount extends AccountEvent {
 }
 
 class GetAccountListByClient extends AccountEvent {
-  int idUser;
-  GetAccountListByClient(this.idUser);
+  int uid;
+  GetAccountListByClient(this.uid);
 }
 
 class ClearAccountBloc extends AccountEvent {}

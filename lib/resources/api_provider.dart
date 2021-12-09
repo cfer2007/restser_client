@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:restser_client/login/bloc/model/firebase_auth_response_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signup_request_model.dart';
+import 'package:restser_client/login/model/firebase_auth_response_model.dart';
+import 'package:restser_client/login/model/firebase_signin_request_model.dart';
+import 'package:restser_client/login/model/firebase_signup_request_model.dart';
 import '../login/widgets/user_secure_storage.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
@@ -18,7 +18,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider{
 
-    Future<APIResponse<Object>> signin(FirebaseSigninRequestModel user) async {
+    Future<APIResponse<Object>> firebaseSignin(FirebaseSigninRequestModel user) async {
     try {      
       String jsonUser = json.encode(user.toJson());
       final response = await http.post(Uri.parse(APIResources.firebaseSignIn),      
@@ -56,12 +56,14 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getUserList(String idUser) async {
+  Future<APIResponse<Object>> getUserList(String uid) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
-        Uri.parse('${APIResources.user}/$idUser'),
+        Uri.parse('${APIResources.user}/$uid'),
         headers: {
-          //HttpHeaders.AUTHORIZATION: await UserSecureStorage().getToken().toString(),
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -83,11 +85,12 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getMenuList(int id) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
         Uri.parse('${APIResources.menu}/$id'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -119,6 +122,7 @@ class ApiProvider{
           'Authorization': 'Bearer $token',
         },
       );
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
             error: false,
@@ -135,14 +139,18 @@ class ApiProvider{
 
   Future<APIResponse<Object>> postReservation(ReservationModel res) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       String jsonRes = json.encode(res.toJson());
+      print(jsonRes);
       final response = await http.post(Uri.parse(APIResources.reservation),
           headers: {
-            //HttpHeaders.authorizationHeader:
-            //   '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
           body: jsonRes);
+
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return getReservation(response.body);
       } else {
@@ -157,11 +165,12 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getReservation(String idReservation) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
         Uri.parse('${APIResources.reservation}/$idReservation'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -180,13 +189,14 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getAccountListByClient(int idUser) async {
+  Future<APIResponse<Object>> getAccountListByClient(int uid) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
-        Uri.parse('${APIResources.account}/list/$idUser'),
+        Uri.parse('${APIResources.account}/list/$uid'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -211,11 +221,13 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setAccount(AccountModel account) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
+
       var jsonRes = json.encode(account);
       final response = await http.post(Uri.parse(APIResources.account),
           headers: {
-            //HttpHeaders.authorizationHeader:
-            //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
           body: jsonRes);
@@ -234,13 +246,14 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setAccountList(List<AccountModel> list) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       var jsonRes = json.encode(list);
 
       final response =
           await http.post(Uri.parse('${APIResources.account}/list'),
               headers: {
-                //HttpHeaders.authorizationHeader:
-                //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+                'Authorization': 'Bearer $token',
                 'Content-Type': 'application/json',
               },
               body: jsonRes);
@@ -258,11 +271,12 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getAccount(String idAccount) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
         Uri.parse('${APIResources.account}/$idAccount'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -282,11 +296,12 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getAccountList(String idReservation) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
         Uri.parse('${APIResources.account}/reservation/$idReservation'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -310,11 +325,12 @@ class ApiProvider{
   Future<APIResponse<Object>> getBranchDishesList(
       String idBranch, String idMenu) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
         Uri.parse('${APIResources.branchDish}/$idBranch/$idMenu'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -336,17 +352,18 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getOrderListByClient(String idUser) async {
+  Future<APIResponse<Object>> getOrderListByClient(String uid) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
-        Uri.parse('${APIResources.order}/user/$idUser'),
+        Uri.parse('${APIResources.order}/user/$uid'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(
@@ -366,11 +383,12 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setOrder(OrderModel order) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       var jsonOrder = json.encode(order);
       final response = await http.post(Uri.parse(APIResources.order),
           headers: {
-            //HttpHeaders.authorizationHeader:
-            //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
           body: jsonOrder);
@@ -386,14 +404,14 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<bool>> setDishesOrder(
-      List<OrderDetailModel> dishes) async {
+  Future<APIResponse<bool>> setDishesOrder(List<OrderDetailModel> dishes) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       var jsonDishes = json.encode(dishes);
       final response = await http.post(Uri.parse(APIResources.orderDetail),
           headers: {
-            //HttpHeaders.authorizationHeader:
-            //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
           body: jsonDishes);
@@ -409,13 +427,14 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getContactList(String idUser) async {
+  Future<APIResponse<Object>> getContactList(String uid) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       final response = await http.get(
-        Uri.parse('${APIResources.contact}/$idUser'),
+        Uri.parse('${APIResources.contact}/$uid'),
         headers: {
-          //HttpHeaders.authorizationHeader:
-          //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
@@ -439,12 +458,13 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setContactList(List<ContactModel> list) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       var req = json.encode(list);
       final response =
           await http.post(Uri.parse('${APIResources.contact}/list'),
               headers: {
-                //HttpHeaders.authorizationHeader:
-                //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+                'Authorization': 'Bearer $token',
                 'Content-Type': 'application/json',
               },
               body: req);
@@ -462,12 +482,13 @@ class ApiProvider{
 
   Future<APIResponse<Object>> deleteContactList(List<ContactModel> list) async {
     try {
+      final token =await UserSecureStorage().getToken();
+
       var req = json.encode(list);
       final response =
           await http.delete(Uri.parse('${APIResources.contact}/list'),
               headers: {
-                //HttpHeaders.authorizationHeader:
-                //    '${await FlutterSession().get("tokenType")} ${await FlutterSession().get("accessToken")}',
+                'Authorization': 'Bearer $token',
                 'Content-Type': 'application/json',
               },
               body: req);

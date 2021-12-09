@@ -1,3 +1,5 @@
+import 'package:restser_client/login/widgets/user_secure_storage.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/account/models/account_model.dart';
 import '/user/models/user_model.dart';
@@ -79,7 +81,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               _accountBloc!.add(SetAccount(AccountModel(
                   reservation: state.reservation,
                   user:
-                      UserModel(idUser: state.reservation.user!.idUser))));
+                      UserModel(uid: state.reservation.user!.uid))));
             } else if (state is ReservationError) {
               errorAlert("La Reservacion no es valida");
             }
@@ -172,11 +174,14 @@ class _ReservationScreenState extends State<ReservationScreen> {
             child: const Text('Cancelar'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
+              var uid =await UserSecureStorage().getUid();
+              var email =await UserSecureStorage().getEmail();
+
               final cli = UserModel(
-                idUser: BlocProvider.of<LoginBloc>(context).state.loginUser!.uid,
-                name: BlocProvider.of<LoginBloc>(context).state.loginUser!.email,
-                email: BlocProvider.of<LoginBloc>(context).state.loginUser!.email,
+                uid: uid,
+                name: email,
+                email: email,
               );
               final res = ReservationModel(
                 user: cli,

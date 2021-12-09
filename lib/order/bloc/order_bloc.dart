@@ -36,7 +36,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
       if (event is GetOrderListByClient) {
         final listOrder =
-            await _apiRepository.getOrderListByClient(event.idUser!);
+            await _apiRepository.getOrderListByClient(event.uid!);
         if (listOrder.error) {
           yield OrderError(listOrder.errorMessage as String);
         } else {

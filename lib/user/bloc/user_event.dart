@@ -5,6 +5,6 @@ class UserEvent {
 }
 
 class GetUserList extends UserEvent {
-  String idUser;
-  GetUserList(this.idUser);
+  String uid;
+  GetUserList(this.uid);
 }

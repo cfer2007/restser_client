@@ -59,7 +59,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         }
       }
       if (event is GetAccountListByClient) {
-        final res = await _apiRepository.getAccountListByClient(event.idUser);
+        final res = await _apiRepository.getAccountListByClient(event.uid);
         if (res.error) {
           yield AccountError(res.errorMessage as String);
         } else {

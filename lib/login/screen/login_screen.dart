@@ -1,8 +1,7 @@
-import 'package:restser_client/login/bloc/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signup_request_model.dart';
+import 'package:restser_client/login/model/firebase_signin_request_model.dart';
+import 'package:restser_client/login/model/firebase_signup_request_model.dart';
 import 'package:restser_client/services/push_notifications_service.dart';
 import '/login/bloc/login_bloc.dart';
-import '/user/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -39,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: data.password,
         fcmToken: token,
       )));
-      await Future.delayed(const Duration(seconds: 2));
+      //await Future.delayed(const Duration(seconds: 2));
       return val;
     //}
   }

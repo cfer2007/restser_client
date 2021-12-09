@@ -31,7 +31,7 @@ class ReservationModel {
   Map<String, dynamic> toJson() => {
         "status": status,
         "start": start,
-        "user": {"idUser": user!.idUser},
+        "user": {"uid": user!.uid},
         "table": {"idTable": table!.idTable},
       };
 }

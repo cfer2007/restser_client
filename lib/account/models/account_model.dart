@@ -19,7 +19,7 @@ class AccountModel {
     );
   }
   Map<String, dynamic> toJson() => {
-        "user": {"idUser": user!.idUser},
+        "user": {"uid": user!.uid},
         "reservation": {"idReservation": reservation!.idReservation},
       };
 }

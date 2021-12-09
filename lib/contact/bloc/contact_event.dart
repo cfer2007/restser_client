@@ -5,9 +5,9 @@ abstract class ContactEvent {
 }
 
 class GetContactList extends ContactEvent {
-  String idUser;
+  String uid;
   bool isMultiAccount;
-  GetContactList(this.idUser, this.isMultiAccount);
+  GetContactList(this.uid, this.isMultiAccount);
 }
 
 class AddContact extends ContactEvent {

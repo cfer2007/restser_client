@@ -76,7 +76,7 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
                         selectedSpinnerItem = newVal;
                         final account = new AccountModel(
                           user: new UserModel(
-                              idUser: data[data.indexWhere(
+                              uid: data[data.indexWhere(
                                       (tx) => tx.username == newVal)]
                                   .idFriend!,
                               name: newVal!,

@@ -1,3 +1,5 @@
+import 'package:restser_client/login/widgets/user_secure_storage.dart';
+
 import '/login/bloc/login_bloc.dart';
 import '/order/bloc/order_bloc.dart';
 import '/order/models/order_model.dart';
@@ -13,19 +15,22 @@ class ReservationListScreen extends StatefulWidget {
 
 class _ReservationListScreenState extends State<ReservationListScreen> {
   OrderBloc? _orderBloc;
-  LoginBloc? _loginBloc;
   final List<OrderModel> _activeList = [];
   final List<OrderModel> _finishList = [];
   bool isLoadedFirstTime = true;
   Icon _icon = const Icon(Icons.arrow_drop_down_outlined);  
+  var uid;
 
   @override
-  void initState() {
+  initState() {
     _orderBloc = BlocProvider.of<OrderBloc>(context);
-    _loginBloc = BlocProvider.of<LoginBloc>(context);
-    _orderBloc!
-        .add(GetOrderListByClient(idUser: _loginBloc!.state.loginUser!.uid));
+    init();    
     super.initState();
+  }
+
+  Future init() async {
+    uid = await UserSecureStorage().getUid();
+    _orderBloc!.add(GetOrderListByClient(uid: uid));
   }
 
   @override

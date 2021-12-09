@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     init();
@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   Future init() async {
     print(await UserSecureStorage().getEmail());
-  }
+  }*/
 
 
   @override

@@ -26,7 +26,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       }
       if (event is GetContactList) {
         {
-          final contactList = await _apiRepository.getContactList(event.idUser);
+          final contactList = await _apiRepository.getContactList(event.uid);
           if (contactList.error) {
             yield ContactError(contactList.errorMessage as String);
           } else {

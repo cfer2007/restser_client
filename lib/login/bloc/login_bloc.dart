@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:restser_client/login/bloc/model/firebase_auth_response_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/bloc/model/firebase_signup_request_model.dart';
+import 'package:restser_client/login/model/firebase_auth_response_model.dart';
+import 'package:restser_client/login/model/firebase_signin_request_model.dart';
+import 'package:restser_client/login/model/firebase_signup_request_model.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 import '/resources/api_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -36,12 +36,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       } 
       else if (event is FirebaseSignUp) {
+        yield LoginLoading();
         final _signup = await _apiRepository.firebaseSignup(event.loginUser);        
         if (_signup.error) {
           yield LoginError(_signup.errorMessage.toString());
         } else {
+          print('object');
           FirebaseResponseModel user = _signup.data as FirebaseResponseModel;
           userRepository.setLoginData(user.email!, user.idToken!, user.uid!);
+          print('asd2');
           yield FirebaseLoginLoaded();
         }
       }
