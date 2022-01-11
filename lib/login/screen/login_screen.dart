@@ -1,16 +1,22 @@
-import 'package:restser_client/login/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/model/firebase_signup_request_model.dart';
+//import 'package:restser_client/login/model/signin_email_request_model.dart';
+import 'package:restser_client/login/model/auth_user_request_model.dart';
 import 'package:restser_client/services/push_notifications_service.dart';
 import '/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 const users = {
   'abc@gmail.com': 'abc',
   'cf@gmail.com': '123',
 };
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>['email',],);
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,24 +29,64 @@ class _LoginScreenState extends State<LoginScreen> {
   Duration get loginTime => const Duration(milliseconds: 2250);
   String val = 'error';
 
-  Future<String> _authUser(LoginData data) async {
-    BlocProvider.of<LoginBloc>(context)
-        .add(FirebaseSignIn(FirebaseSigninRequestModel(email: data.name, password: data.password)));
-    await Future.delayed(const Duration(seconds: 2));
-    return val;
+  addUserBloc(FirebaseAuth _auth) async{
+    BlocProvider.of<LoginBloc>(context).add(AuthUser(AuthUserRequestModel(
+        uid: _auth.currentUser!.uid,
+        email: _auth.currentUser!.email, 
+        fcmToken: await PushNotificationsService.initiallizeApp()),_auth.currentUser!));
   }
 
-  Future<String> _singupUser(SignupData data) async {
-      WidgetsFlutterBinding.ensureInitialized();
-      String token=await PushNotificationsService.initiallizeApp();
-      BlocProvider.of<LoginBloc>(context).add(FirebaseSignUp(FirebaseSignupRequestModel(
-        email: data.name,
-        password: data.password,
-        fcmToken: token,
-      )));
-      //await Future.delayed(const Duration(seconds: 2));
-      return val;
-    //}
+  Future<String> _signInWithEmailAndPassword(LoginData data) async {
+    try {                  
+      await _auth.signInWithEmailAndPassword(email: data.name, password: data.password);
+      addUserBloc(_auth);
+      return '';
+    } catch (error) {
+      return 'error';
+    }    
+  }
+
+  Future<String> _signInWithGoogle() async {
+    try {                  
+      GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      GoogleSignInAuthentication gsa = await googleSignInAccount!.authentication;
+      await _auth.signInWithCredential(GoogleAuthProvider.credential(idToken: gsa.idToken, accessToken: gsa.accessToken));
+      addUserBloc(_auth);
+      return '';
+    } catch (error) {
+      return 'error';
+    }    
+  }
+
+  Future<String> _signInWithFacebook() async {
+    try{
+      final result = await FacebookAuth.i.login(permissions: ["public_profile", "email"]);
+      if (result.status == LoginStatus.success) {
+        final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(result.accessToken!.token);
+        await _auth.signInWithCredential(facebookAuthCredential);
+        addUserBloc(_auth);
+        return '';
+      }
+      else { return 'error: ${result.message}'; }
+    }
+    catch(error){
+      return 'error';
+    }
+  }
+
+  Future<String> _singupUserWithEmailAndPassword(SignupData data) async {
+    try{
+      await _auth.createUserWithEmailAndPassword(email: data.name!, password: data.password!);
+      BlocProvider.of<LoginBloc>(context).add(AuthUser(AuthUserRequestModel(
+        uid: _auth.currentUser!.uid,
+        email: _auth.currentUser!.email, 
+        fcmToken: await PushNotificationsService.initiallizeApp()),_auth.currentUser!));
+      return '';
+    }
+    catch(error){
+      return 'error';
+    }
+      
   }
 
   Future<String> _recoverPassword(String email) {
@@ -51,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return '';
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(
@@ -67,8 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
         return FlutterLogin(
           title: 'Client',
           //logo: 'assets/images/logo4.png',          
-          onLogin: _authUser,
-          onSignup: _singupUser,
+          onLogin: _signInWithEmailAndPassword,//WithEmainPassword,
+          onSignup: _singupUserWithEmailAndPassword,
           onRecoverPassword: _recoverPassword,
           navigateBackAfterRecovery: true,
           theme: LoginTheme(),
@@ -79,44 +124,19 @@ class _LoginScreenState extends State<LoginScreen> {
             LoginProvider(
               icon: FontAwesomeIcons.google,
               callback: () async {
-                print('start google sign in');
-                await Future.delayed(loginTime);
-                print('stop google sign in');
-                return null;
+                return _signInWithGoogle();
               },
             ),
             LoginProvider(
               icon: FontAwesomeIcons.facebookF,
               callback: () async {
-                print('start facebook sign in');
-                await Future.delayed(loginTime);
-                print('stop facebook sign in');
-                return null;
-              },
-            ),
-            LoginProvider(
-              icon: FontAwesomeIcons.linkedinIn,
-              callback: () async {
-                print('start linkdin sign in');
-                await Future.delayed(loginTime);
-                print('stop linkdin sign in');
-                return null;
+                return _signInWithFacebook();                
               },
             ),
           ],
-          messages: LoginMessages(
-            //userHint: 'User',
-            //passwordHint: 'Pass',
-            //confirmPasswordHint: 'Confirm',
-            //loginButton: 'LOG IN',
-            //signupButton: 'REGISTER',
-            //forgotPasswordButton: 'Forgot huh?',
+          messages: LoginMessages(            
             recoverPasswordButton: 'HELP ME',
             goBackButton: 'BACK',
-            //confirmPasswordError: 'Not match!',
-            //recoverPasswordDescription:
-            //    'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-            //recoverPasswordSuccess: 'Password rescued successfully',
           ),
           passwordValidator: (value) {
             if (value!.isEmpty) {

@@ -1,5 +1,4 @@
-import 'package:restser_client/login/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/model/firebase_signup_request_model.dart';
+import 'package:restser_client/login/model/auth_user_request_model.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/order/models/order_model.dart';
@@ -11,12 +10,8 @@ import 'api_provider.dart';
 class ApiRepository {
   final _provider = ApiProvider();
 
-  Future<APIResponse<Object>> signin(FirebaseSigninRequestModel user) {
-    return _provider.firebaseSignin(user);
-  }
-
-  Future<APIResponse<Object>> firebaseSignup(FirebaseSignupRequestModel user) {
-    return _provider.firebaseSignup(user);
+  Future<APIResponse<Object>> authUser(AuthUserRequestModel user) {
+    return _provider.authUser(user);
   }
 
   Future<APIResponse<Object>> getUserList(String uid) {

@@ -4,14 +4,10 @@ abstract class LoginEvent {
   const LoginEvent();
 }
 
-class FirebaseSignIn extends LoginEvent {
-  final FirebaseSigninRequestModel user;
-  FirebaseSignIn(this.user);
-}
-
-class FirebaseSignUp extends LoginEvent {
-  final FirebaseSignupRequestModel loginUser;
-  FirebaseSignUp(this.loginUser);
+class AuthUser extends LoginEvent {
+  final AuthUserRequestModel user;
+  User firebaseUser;
+  AuthUser(this.user, this.firebaseUser);
 }
 
 class SignOut extends LoginEvent {

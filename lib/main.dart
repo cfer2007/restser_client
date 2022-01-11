@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 
 import '/login/bloc/login_bloc.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async{ 
     final userRepository = UserSecureStorage();
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
     runApp(BlocProvider<LoginBloc>(
       create: (_) => LoginBloc(userRepository),
       child: MyApp(),

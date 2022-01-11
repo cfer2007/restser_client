@@ -1,19 +1,6 @@
 part of 'login_bloc.dart';
 
-class LoginState {
-  //final UserModel? user;
-  FirebaseResponseModel? loginUser;
-  LoginState({this.loginUser});
-
-  LoginState copyWith({
-    FirebaseResponseModel? loginUser,
-  }) {
-    return LoginState(
-      loginUser: loginUser ?? this.loginUser,
-    );
-  }
-
-}
+class LoginState {}
 
 class LoginInitial extends LoginState {
   LoginInitial();
@@ -24,22 +11,18 @@ class LoginLoading extends LoginState {
 }
 
 class LoginLoaded extends LoginState {
-  //final UserModel user;
-  LoginLoaded(/*this.user*/);
+  LoginLoaded();
 }
 
 class FirebaseLoginLoaded extends LoginState {
   FirebaseLoginLoaded();
 }
 
-/*class SignupLoaded extends LoginState {
-  String message;
-  SignupLoaded(this.message);
-}*/
-
 class LoginError extends LoginState {
   final String message;
   LoginError(this.message);
 }
 
-class LogOutSuccessState extends LoginState {}
+/*class LogOutSuccessState extends LoginState {
+  
+}*/

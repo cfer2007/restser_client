@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:restser_client/login/model/firebase_auth_response_model.dart';
-import 'package:restser_client/login/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/model/firebase_signup_request_model.dart';
+//import 'package:restser_client/login/model/auth_email_response_model.dart';
+//import 'package:restser_client/login/model/signin_email_request_model.dart';
+import 'package:restser_client/login/model/auth_user_request_model.dart';
 import '../login/widgets/user_secure_storage.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
@@ -18,15 +18,15 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider{
 
-    Future<APIResponse<Object>> firebaseSignin(FirebaseSigninRequestModel user) async {
+    /*Future<APIResponse<Object>> firebaseSignin(SigninEmailRequestModel user) async {
     try {      
       String jsonUser = json.encode(user.toJson());
-      final response = await http.post(Uri.parse(APIResources.firebaseSignIn),      
-          headers: APIResources.headerLogin, body: jsonUser);
+      final response = await http.post(Uri.parse(APIResources.signInEmail),      
+          headers: APIResources.header, body: jsonUser);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
             error: false, 
-            data: FirebaseResponseModel.fromJson(json.decode(response.body))); 
+            data: AuthEmailResponseModel.fromJson(json.decode(response.body))); 
       }
       return APIResponse<bool>(error: true, errorMessage: 'An error occured');
     } catch (error, stacktrace) {
@@ -36,16 +36,36 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> firebaseSignup(FirebaseSignupRequestModel user) async {
+  Future<APIResponse<Object>> signupEmailUser(SignupUserRequestModel user) async {
     try {
       String jsonSignup = json.encode(user.toJson());
-      final response = await http.post(Uri.parse(APIResources.firebasesignUp),
-          headers: APIResources.headerLogin, body: jsonSignup);
+      final response = await http.post(Uri.parse(APIResources.signUpEmail),
+          headers: APIResources.header, body: jsonSignup);
       final parsedJson = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
             error: false, 
-            data: FirebaseResponseModel.fromJson(json.decode(response.body)));       
+            data: AuthEmailResponseModel.fromJson(json.decode(response.body)));       
+      }
+      return APIResponse<bool>(
+          error: true, errorMessage: parsedJson['message']);
+    } catch (error, stacktrace) {
+      return APIResponse<bool>(
+          error: true,
+          errorMessage: "Exception occured: $error stackTrace: $stacktrace");
+    }
+  }*/
+
+  Future<APIResponse<Object>> authUser(AuthUserRequestModel user) async {
+    try {
+      String jsonSignup = json.encode(user.toSNJson());
+      final response = await http.post(Uri.parse(APIResources.authUser),
+          headers: APIResources.header, body: jsonSignup);
+      final parsedJson = json.decode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return APIResponse<Object>(
+            error: false, 
+            data: response.body);       
       }
       return APIResponse<bool>(
           error: true, errorMessage: parsedJson['message']);

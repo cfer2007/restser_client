@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:restser_client/login/model/firebase_auth_response_model.dart';
-import 'package:restser_client/login/model/firebase_signin_request_model.dart';
-import 'package:restser_client/login/model/firebase_signup_request_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restser_client/login/model/auth_user_request_model.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 import '/resources/api_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -20,34 +19,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEvent event,
   ) async* {
     try {
-      if (event is FirebaseSignIn) {
+      if (event is AuthUser){
         yield LoginLoading();
-        final firebaseSignIn = await _apiRepository.signin(event.user);
-
-        if (firebaseSignIn.error) {
-          yield LoginError(firebaseSignIn.errorMessage as String);
-        } else {
-          FirebaseResponseModel user = firebaseSignIn.data as FirebaseResponseModel;
-          userRepository.setLoginData(user.email!, user.idToken!, user.uid!);
-          yield FirebaseLoginLoaded();
+        final result = await _apiRepository.authUser(event.user);
+        if(result.error){
+          yield LoginError(result.errorMessage as String);
         }
-      } else if (event is SignOut) {
-        LogOutSuccessState();
-
-      } 
-      else if (event is FirebaseSignUp) {
-        yield LoginLoading();
-        final _signup = await _apiRepository.firebaseSignup(event.loginUser);        
-        if (_signup.error) {
-          yield LoginError(_signup.errorMessage.toString());
-        } else {
-          print('object');
-          FirebaseResponseModel user = _signup.data as FirebaseResponseModel;
-          userRepository.setLoginData(user.email!, user.idToken!, user.uid!);
-          print('asd2');
+        else {
+          userRepository.setLoginData(event.user.email!, await event.firebaseUser.getIdToken(), event.firebaseUser.uid);
           yield FirebaseLoginLoaded();
         }
       }
+      /*else if (event is SignOut) {
+        
+        
+        LogOutSuccessState();
+      }*/
     } on NetworkError {
       yield LoginError("Failed to fetch data. is your device online?");
     }

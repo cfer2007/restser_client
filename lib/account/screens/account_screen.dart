@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/widgets/my_appbar.dart';
 import '/account/widgets/profile_menu.dart';
 import 'package:flutter/material.dart';
@@ -22,17 +24,17 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ProfileMenu(
               text: "Mi Cuenta",
-              icon: const Icon(Icons.person), //"assets/icons/User Icon.svg",
+              icon: const Icon(Icons.person), 
               press: () => {},
             ),
             ProfileMenu(
               text: "Friends",
-              icon: const Icon(Icons.group_add), //"assets/icons/User Icon.svg",
+              icon: const Icon(Icons.group_add), 
               press: () => {Navigator.of(context).pushNamed('/contact_screen')},
             ),
             ProfileMenu(
               text: "Metodos de Pago",
-              icon: const Icon(Icons.payment), //"assets/icons/User Icon.svg",
+              icon: const Icon(Icons.payment), 
               press: () => {},
             ),
             ProfileMenu(
@@ -43,7 +45,8 @@ class AccountScreen extends StatelessWidget {
             ProfileMenu(
               text: "Cerrar Sesión",
               icon: const Icon(Icons.logout),
-              press: () {
+              press: () async {
+                await FirebaseAuth.instance.signOut();
                 Navigator.pushNamedAndRemoveUntil(
                     context, "/", (Route<dynamic> route) => false);
               },
