@@ -12,7 +12,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 const users = {
   'abc@gmail.com': 'abc',
-  'cf@gmail.com': '123',
+  'cfer86@gmail.com': '123',
 };
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     BlocProvider.of<LoginBloc>(context).add(AuthUser(AuthUserRequestModel(
         uid: _auth.currentUser!.uid,
         email: _auth.currentUser!.email, 
-        fcmToken: await PushNotificationsService.initiallizeApp()),_auth.currentUser!));
+        fcmToken: await PushNotificationsService.initiallizeApp())));
   }
 
   Future<String> _signInWithEmailAndPassword(LoginData data) async {
@@ -52,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       GoogleSignInAuthentication gsa = await googleSignInAccount!.authentication;
       await _auth.signInWithCredential(GoogleAuthProvider.credential(idToken: gsa.idToken, accessToken: gsa.accessToken));
       addUserBloc(_auth);
+      
       return '';
     } catch (error) {
       return 'error';
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
       BlocProvider.of<LoginBloc>(context).add(AuthUser(AuthUserRequestModel(
         uid: _auth.currentUser!.uid,
         email: _auth.currentUser!.email, 
-        fcmToken: await PushNotificationsService.initiallizeApp()),_auth.currentUser!));
+        fcmToken: await PushNotificationsService.initiallizeApp())));
       return '';
     }
     catch(error){
@@ -89,14 +90,25 @@ class _LoginScreenState extends State<LoginScreen> {
       
   }
 
-  Future<String> _recoverPassword(String email) {
+  Future<String> _recoverPassword(String email) async{
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(email)) {
-        return 'Username not exists';
+        return 'User not exists';
       }
-      return '';
+      else {
+        try{
+          _auth.sendPasswordResetEmail(email: email);
+          return '';
+        }
+        catch(error){
+          print('error: $error');
+          return error.toString();
+        }        
+      }
     });
   }
+
+  
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(
@@ -111,11 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         return FlutterLogin(
           title: 'Client',
-          //logo: 'assets/images/logo4.png',          
           onLogin: _signInWithEmailAndPassword,//WithEmainPassword,
           onSignup: _singupUserWithEmailAndPassword,
           onRecoverPassword: _recoverPassword,
-          navigateBackAfterRecovery: true,
+          navigateBackAfterRecovery: false,
           theme: LoginTheme(),
           onSubmitAnimationCompleted: () {
             Navigator.of(context).pushReplacementNamed('/home', arguments: 0);
@@ -137,6 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
           messages: LoginMessages(            
             recoverPasswordButton: 'HELP ME',
             goBackButton: 'BACK',
+            recoverPasswordDescription:'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+            recoverPasswordSuccess: 'Password rescued successfully',
           ),
           passwordValidator: (value) {
             if (value!.isEmpty) {

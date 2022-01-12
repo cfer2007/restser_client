@@ -58,11 +58,6 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.shopping_basket),
               label: "Mis Ordenes",
             ),
-
-            /*BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              label: "Contactos",
-            ),*/
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: "Perfil",

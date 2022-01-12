@@ -12,17 +12,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  /*@override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future init() async {
-    print(await UserSecureStorage().getEmail());
-  }*/
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 
 import '/account/bloc/account_bloc.dart';
@@ -175,8 +176,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
           ),
           TextButton(
             onPressed: () async {
-              var uid =await UserSecureStorage().getUid();
-              var email =await UserSecureStorage().getEmail();
+              var uid = await FirebaseAuth.instance.currentUser!.uid;
+              var email =await FirebaseAuth.instance.currentUser!.email;
 
               final cli = UserModel(
                 uid: uid,

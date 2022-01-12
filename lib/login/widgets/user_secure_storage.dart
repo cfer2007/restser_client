@@ -1,4 +1,4 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+/*import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserSecureStorage {
   
@@ -18,19 +18,6 @@ class UserSecureStorage {
     return value != null;
   }
 
-  /*Future<bool> hasEmail() async {
-    var value = _storage.read(key: _emailKey);
-    return value != null;
-  }
-
-  Future<void> deleteToken() async {
-    return _storage.delete(key: _tokenKey);
-  }
-
-  Future<void> deleteEmail() async {
-    return _storage.delete(key: _emailKey);
-  }*/
-
   Future<String?> getEmail() async {
     return _storage.read(key: _emailKey);
   }
@@ -47,4 +34,4 @@ class UserSecureStorage {
   Future<void> deleteAll() async {
     return _storage.deleteAll();
   }
-}
+}*/

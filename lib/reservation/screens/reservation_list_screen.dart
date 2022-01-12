@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 
 import '/login/bloc/login_bloc.dart';
@@ -29,7 +30,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   }
 
   Future init() async {
-    uid = await UserSecureStorage().getUid();
+    uid = await FirebaseAuth.instance.currentUser!.uid;//await UserSecureStorage().getUid();
     _orderBloc!.add(GetOrderListByClient(uid: uid));
   }
 

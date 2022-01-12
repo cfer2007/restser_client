@@ -1,8 +1,9 @@
 import 'dart:convert';
 //import 'package:restser_client/login/model/auth_email_response_model.dart';
 //import 'package:restser_client/login/model/signin_email_request_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/model/auth_user_request_model.dart';
-import '../login/widgets/user_secure_storage.dart';
+//import '../login/widgets/user_secure_storage.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/dish/models/dish_model.dart';
@@ -16,45 +17,7 @@ import '/resources/api_response.dart';
 import '/table/model/table_model.dart';
 import 'package:http/http.dart' as http;
 
-class ApiProvider{
-
-    /*Future<APIResponse<Object>> firebaseSignin(SigninEmailRequestModel user) async {
-    try {      
-      String jsonUser = json.encode(user.toJson());
-      final response = await http.post(Uri.parse(APIResources.signInEmail),      
-          headers: APIResources.header, body: jsonUser);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return APIResponse<Object>(
-            error: false, 
-            data: AuthEmailResponseModel.fromJson(json.decode(response.body))); 
-      }
-      return APIResponse<bool>(error: true, errorMessage: 'An error occured');
-    } catch (error, stacktrace) {
-      return APIResponse<bool>(
-          error: true,
-          errorMessage: "Exception occured: $error stackTrace: $stacktrace");
-    }
-  }
-
-  Future<APIResponse<Object>> signupEmailUser(SignupUserRequestModel user) async {
-    try {
-      String jsonSignup = json.encode(user.toJson());
-      final response = await http.post(Uri.parse(APIResources.signUpEmail),
-          headers: APIResources.header, body: jsonSignup);
-      final parsedJson = json.decode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return APIResponse<Object>(
-            error: false, 
-            data: AuthEmailResponseModel.fromJson(json.decode(response.body)));       
-      }
-      return APIResponse<bool>(
-          error: true, errorMessage: parsedJson['message']);
-    } catch (error, stacktrace) {
-      return APIResponse<bool>(
-          error: true,
-          errorMessage: "Exception occured: $error stackTrace: $stacktrace");
-    }
-  }*/
+class ApiProvider{   
 
   Future<APIResponse<Object>> authUser(AuthUserRequestModel user) async {
     try {
@@ -78,7 +41,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getUserList(String uid) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.user}/$uid'),
@@ -105,7 +68,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getMenuList(int id) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.menu}/$id'),
@@ -133,8 +96,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getTable(String idTable) async {
     try {
-      final token =await UserSecureStorage().getToken();
-      
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();//await UserSecureStorage().getToken();
       final response = await http.get(
         Uri.parse('${APIResources.table}/$idTable'),
         headers: {
@@ -155,11 +117,14 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
+    /*return APIResponse<bool>(
+          error: true,
+          errorMessage: "error");*/
   }
 
   Future<APIResponse<Object>> postReservation(ReservationModel res) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       String jsonRes = json.encode(res.toJson());
       print(jsonRes);
@@ -185,7 +150,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getReservation(String idReservation) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.reservation}/$idReservation'),
@@ -211,7 +176,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getAccountListByClient(int uid) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.account}/list/$uid'),
@@ -241,7 +206,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setAccount(AccountModel account) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
 
       var jsonRes = json.encode(account);
@@ -266,7 +231,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setAccountList(List<AccountModel> list) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonRes = json.encode(list);
 
@@ -291,7 +256,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getAccount(String idAccount) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.account}/$idAccount'),
@@ -316,7 +281,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getAccountList(String idReservation) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.account}/reservation/$idReservation'),
@@ -345,7 +310,7 @@ class ApiProvider{
   Future<APIResponse<Object>> getBranchDishesList(
       String idBranch, String idMenu) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.branchDish}/$idBranch/$idMenu'),
@@ -374,7 +339,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getOrderListByClient(String uid) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.order}/user/$uid'),
@@ -403,7 +368,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setOrder(OrderModel order) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonOrder = json.encode(order);
       final response = await http.post(Uri.parse(APIResources.order),
@@ -426,7 +391,7 @@ class ApiProvider{
 
   Future<APIResponse<bool>> setDishesOrder(List<OrderDetailModel> dishes) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonDishes = json.encode(dishes);
       final response = await http.post(Uri.parse(APIResources.orderDetail),
@@ -449,7 +414,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> getContactList(String uid) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
         Uri.parse('${APIResources.contact}/$uid'),
@@ -478,7 +443,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> setContactList(List<ContactModel> list) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var req = json.encode(list);
       final response =
@@ -502,7 +467,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> deleteContactList(List<ContactModel> list) async {
     try {
-      final token =await UserSecureStorage().getToken();
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var req = json.encode(list);
       final response =
@@ -523,9 +488,4 @@ class ApiProvider{
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
   }
-
-  /*@override
-  Widget build(BuildContext context) {
-    throw UnimplementedError();
-  }*/
 }

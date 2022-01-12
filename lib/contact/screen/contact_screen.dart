@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/widgets/user_secure_storage.dart';
 
 import '/contact/models/contact_model.dart';
@@ -37,7 +38,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Future init() async {
-    uid = await UserSecureStorage().getUid();
+    uid = await await FirebaseAuth.instance.currentUser!.uid;//UserSecureStorage().getUid();
     _userBloc!.add(GetUserList(uid));
   }
 

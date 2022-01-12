@@ -10,8 +10,8 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ApiRepository _apiRepository = ApiRepository();
-  final UserSecureStorage userRepository;
-  LoginBloc(this.userRepository) : super(LoginInitial());
+  //final UserSecureStorage userRepository;
+  LoginBloc(/*this.userRepository*/) : super(LoginInitial());
   
 
   @override
@@ -26,13 +26,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           yield LoginError(result.errorMessage as String);
         }
         else {
-          userRepository.setLoginData(event.user.email!, await event.firebaseUser.getIdToken(), event.firebaseUser.uid);
+          /*userRepository.setLoginData(event.user.email!, 
+            await FirebaseAuth.instance.currentUser!.getIdToken(), 
+            FirebaseAuth.instance.currentUser!.uid);*/
           yield FirebaseLoginLoaded();
         }
       }
-      /*else if (event is SignOut) {
-        
-        
+      /*else if (event is SignOut) {        
         LogOutSuccessState();
       }*/
     } on NetworkError {

@@ -6,8 +6,7 @@ abstract class LoginEvent {
 
 class AuthUser extends LoginEvent {
   final AuthUserRequestModel user;
-  User firebaseUser;
-  AuthUser(this.user, this.firebaseUser);
+  AuthUser(this.user);
 }
 
 class SignOut extends LoginEvent {

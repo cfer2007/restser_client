@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async{ 
-    final userRepository = UserSecureStorage();
+    //final userRepository = UserSecureStorage();
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     runApp(BlocProvider<LoginBloc>(
-      create: (_) => LoginBloc(userRepository),
+      create: (_) => LoginBloc(/*userRepository*/),
       child: MyApp(),
     ));}
 
