@@ -17,14 +17,14 @@ class ProfileMenu extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: FlatButton(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: const Color(0xFFF5F6F9),
         onPressed: press,
         child: Row(
           children: [
             icon,
-            const SizedBox(width: 20),
+            const SizedBox(width: 15),
             Expanded(child: Text(text)),
             const Icon(Icons.arrow_forward_ios),
           ],

@@ -1,7 +1,7 @@
 part of 'order_bloc.dart';
 
 class OrderState {
-  List<OrderDetailModel>? dishes = [];
+  List<OrderDishModel>? dishes = [];
   List<OrderModel>? listOrder = [];
   int? count = 0;
   double? total = 0;
@@ -16,8 +16,7 @@ class OrderState {
       this.idOrder});
 
   OrderState copyWith({
-    List<OrderDetailModel>? dishes,
-    //List<OrderModel>? listOrder,
+    List<OrderDishModel>? dishes,
     int? count,
     double? total,
     bool? setDishesStatus,

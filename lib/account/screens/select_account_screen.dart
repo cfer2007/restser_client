@@ -89,9 +89,7 @@ class _SelectAccountScreenState extends State<SelectAccountScreen> {
                 label: const Text("Confirmar"),
                 onPressed: () {
                   _accountBloc!.add(JoinAccount(selectedAccount!));
-                  Navigator.of(context).pushNamed(
-                    '/menu',
-                  );
+                  Navigator.of(context).pushNamed('/menu',);
                 }),
           );
         });

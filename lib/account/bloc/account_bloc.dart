@@ -13,6 +13,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   List<AccountModel> accountList = [];
   //AccountModel account;
 
+  @override
   Stream<AccountState> mapEventToState(
     AccountEvent event,
   ) async* {
@@ -23,7 +24,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       }
       if (event is SetAccount) {
         final result = await _apiRepository.setAccount(event.account);
-        if (result.error) {
+        if (result.error) {          
           yield AccountError(result.errorMessage as String);
         } else {
           state.copyWith(setMainAccountStatus: true);
@@ -54,8 +55,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         if (result.error) {
           yield AccountError(result.errorMessage as String);
         } else {
-          yield state.copyWith(
+          state.copyWith(
               accountReservationList: result.data as List<AccountModel>);
+          yield GetAccountReservationListLoaded(result.data as List<AccountModel>);
         }
       }
       if (event is GetAccountListByClient) {

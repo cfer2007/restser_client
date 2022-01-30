@@ -1,16 +1,13 @@
 import 'dart:convert';
-//import 'package:restser_client/login/model/auth_email_response_model.dart';
-//import 'package:restser_client/login/model/signin_email_request_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/model/auth_user_request_model.dart';
-//import '../login/widgets/user_secure_storage.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/dish/models/dish_model.dart';
 import '/menu/model/menu_model.dart';
 import '/user/models/user_model.dart';
 import '/order/models/order_model.dart';
-import '/order/models/order_detail_model.dart';
+import '../order/models/order_dish_model.dart';
 import '/reservation/models/reservation_model.dart';
 import '/resources/api_resources.dart';
 import '/resources/api_response.dart';
@@ -21,7 +18,7 @@ class ApiProvider{
 
   Future<APIResponse<Object>> authUser(AuthUserRequestModel user) async {
     try {
-      String jsonSignup = json.encode(user.toSNJson());
+      String jsonSignup = json.encode(user.toJson());
       final response = await http.post(Uri.parse(APIResources.authUser),
           headers: APIResources.header, body: jsonSignup);
       final parsedJson = json.decode(response.body);
@@ -104,7 +101,6 @@ class ApiProvider{
           'Authorization': 'Bearer $token',
         },
       );
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
             error: false,
@@ -117,9 +113,6 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-    /*return APIResponse<bool>(
-          error: true,
-          errorMessage: "error");*/
   }
 
   Future<APIResponse<Object>> postReservation(ReservationModel res) async {
@@ -127,7 +120,6 @@ class ApiProvider{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       String jsonRes = json.encode(res.toJson());
-      print(jsonRes);
       final response = await http.post(Uri.parse(APIResources.reservation),
           headers: {
             'Authorization': 'Bearer $token',
@@ -135,7 +127,6 @@ class ApiProvider{
           },
           body: jsonRes);
 
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return getReservation(response.body);
       } else {
@@ -151,22 +142,53 @@ class ApiProvider{
   Future<APIResponse<Object>> getReservation(String idReservation) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
-
-      final response = await http.get(
-        Uri.parse('${APIResources.reservation}/$idReservation'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
+      if(idReservation.isNotEmpty){
+        final response = await http.get(
+          Uri.parse('${APIResources.reservation}/$idReservation'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        );
+        //print(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          return APIResponse<Object>(
+              error: false,
+              data: ReservationModel.fromJson(json.decode(response.body)));
+        } else {
+          return APIResponse<bool>(error: true, errorMessage: response.body);
+        }
+      }
+      else {
+          return APIResponse<bool>(error: true, errorMessage: 'idReservation is null');
+        }
+      
+    } catch (error, stacktrace) {
+      return APIResponse<bool>(
+          error: true,
+          errorMessage: "Exception occured: $error stackTrace: $stacktrace");
+    }
+  }
+  Future<APIResponse<Object>> confirmReservation(ReservationModel res) async {
+    try {
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      String jsonRes = json.encode(res.toJsonConfirm());
+      print(jsonRes);
+      final response = await http.put(Uri.parse(APIResources.reservation),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonRes);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
-            error: false,
-            data: ReservationModel.fromJson(json.decode(response.body)));
+              error: false,
+              data: response.body);
       } else {
         return APIResponse<bool>(error: true, errorMessage: response.body);
       }
+      //return APIResponse<bool>(error: true, errorMessage: '');
     } catch (error, stacktrace) {
       return APIResponse<bool>(
           error: true,
@@ -207,8 +229,6 @@ class ApiProvider{
   Future<APIResponse<Object>> setAccount(AccountModel account) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
-
-
       var jsonRes = json.encode(account);
       final response = await http.post(Uri.parse(APIResources.account),
           headers: {
@@ -216,7 +236,6 @@ class ApiProvider{
             'Content-Type': 'application/json',
           },
           body: jsonRes);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         return getAccount(response.body);
       } else {
@@ -290,6 +309,7 @@ class ApiProvider{
           'Content-Type': 'application/json',
         },
       );
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(
@@ -348,7 +368,6 @@ class ApiProvider{
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(
@@ -371,6 +390,7 @@ class ApiProvider{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonOrder = json.encode(order);
+      print(jsonOrder);
       final response = await http.post(Uri.parse(APIResources.order),
           headers: {
             'Authorization': 'Bearer $token',
@@ -389,7 +409,7 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<bool>> setDishesOrder(List<OrderDetailModel> dishes) async {
+  Future<APIResponse<bool>> setDishesOrder(List<OrderDishModel> dishes) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 

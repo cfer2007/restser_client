@@ -91,7 +91,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         order: OrderModel(
                         account: _accountBloc!.state.account,
                         description: 'desc',
-                        status: 'INICIO',
+                        status: OrderStatus.started.name,
                         date: APIResources.dateFormat.format(DateTime.now()),
                         totalPrice: state.total,
                         totalUnits: state.count,

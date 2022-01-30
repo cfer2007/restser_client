@@ -1,7 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:restser_client/login/widgets/user_secure_storage.dart';
-
-import '/login/bloc/login_bloc.dart';
 import '/order/bloc/order_bloc.dart';
 import '/order/models/order_model.dart';
 import 'package:flutter/material.dart';
@@ -127,17 +124,17 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
-                        'Total: ${list[index].listOrderDetail![0].currency}.${list[index].totalPrice}'),
+                        'Total: ${list[index].listOrderDish![0].currency}.${list[index].totalPrice}'),
                     _icon,
                   ],
                 ),
                 children: <Widget>[
-                  for (int i = 0; i < list[index].listOrderDetail!.length; i++)
+                  for (int i = 0; i < list[index].listOrderDish!.length; i++)
                     ListTile(
                       title:
-                          Text('${list[index].listOrderDetail![i].name}'),
+                          Text('${list[index].listOrderDish![i].name}'),
                       subtitle: Text(
-                          '${list[index].listOrderDetail![i].units} x ${list[index].listOrderDetail![i].currency}${list[index].listOrderDetail![i].price}'),
+                          '${list[index].listOrderDish![i].units} x ${list[index].listOrderDish![i].currency}${list[index].listOrderDish![i].price}'),
                     )
                 ],
               )

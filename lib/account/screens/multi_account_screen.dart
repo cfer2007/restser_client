@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_new
 
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
@@ -23,6 +25,7 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
   String? selectedSpinnerItem;
   AccountBloc? _accountBloc;
   ContactBloc? _contactBloc;
+  ReservationBloc? _reservationBloc;
   Future<List<ContactModel>>? myFuture;
 
   Future<List<ContactModel>> getData() async {
@@ -34,6 +37,7 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
   @override
   void initState() {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     _contactBloc = BlocProvider.of<ContactBloc>(context);
     myFuture = getData();
     super.initState();
@@ -84,8 +88,8 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
                                       (tx) => tx.username == newVal)]
                                   .email!),
                           reservation: new ReservationModel(
-                              idReservation: _accountBloc!
-                                  .state.account!.reservation!.idReservation),
+                              idReservation: _reservationBloc!
+                                  .state.reservation!.idReservation),
                         );
                         _accountBloc!.add(AddAccount(account));
                       },

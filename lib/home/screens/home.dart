@@ -1,3 +1,5 @@
+import 'package:restser_client/reservation/screens/reservation_order_list.dart';
+
 import '/account/screens/account_screen.dart';
 import '/home/widgets/home_page.dart';
 import '../../reservation/screens/reservation_list_screen.dart';
@@ -18,7 +20,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     const HomePage(),
     const RestauratPage(),
-    const ReservationListScreen(),
+    const ReservationOrderList(),//ReservationListScreen(),
     //ContactScreen(),
     const AccountScreen(),
   ];

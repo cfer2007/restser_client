@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:restser_client/login/widgets/user_secure_storage.dart';
-
 import '/account/bloc/account_bloc.dart';
 import '/account/models/account_model.dart';
 import '/user/models/user_model.dart';
-import '/login/bloc/login_bloc.dart';
 import '/reservation/bloc/reservation_bloc.dart';
 import '/reservation/models/reservation_model.dart';
 import '/reservation/widgets/reservation_arguments.dart';
@@ -32,7 +29,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
   ReservationBloc? _reservationBloc;
   TableBloc? _tableBloc;
   AccountBloc? _accountBloc;
-
+  
   bool validateTextField(String userInput) {
     if (userInput.isEmpty) {
       setState(() {
@@ -55,7 +52,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
     BlocProvider.of<AccountBloc>(context).add(ClearAccountBloc());
     return Scaffold(
       appBar: MyAppBar(
-          title: widget.arguments.title, context: context, leading: false),
+          title: widget.arguments.title, context: context, leading: true),
       body: _buildScreen(),
     );
   }
@@ -81,8 +78,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
             } else if (state is ReservationSetted) {
               _accountBloc!.add(SetAccount(AccountModel(
                   reservation: state.reservation,
-                  user:
-                      UserModel(uid: state.reservation.user!.uid))));
+                  user: UserModel(uid: state.reservation?.user!.uid))));
             } else if (state is ReservationError) {
               errorAlert("La Reservacion no es valida");
             }
@@ -93,7 +89,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
           listener: (context, state) {
             if (state is SetAccountLoaded) {
               Navigator.of(context).pushReplacementNamed('/type_account');
-            } else if (state is AccountError) {
+            } 
+            else if(state is GetAccountReservationListLoaded){
+              Navigator.of(context).pushReplacementNamed('/select_account');
+            }             
+            else if (state is AccountError) {
               print(state.message);
             }
           },
@@ -134,8 +134,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
             if (codeController.text.isNotEmpty) {
               widget.arguments.isNewReservation == true
                   ? _tableBloc!.add(GetTable(codeController.text))
-                  : _reservationBloc!
-                      .add(GetReservation(codeController.text));
+                  : _reservationBloc!.add(GetReservation(codeController.text));
             }
           },
           icon: widget.arguments.codeBtnIcon,
@@ -176,8 +175,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
           ),
           TextButton(
             onPressed: () async {
-              var uid = await FirebaseAuth.instance.currentUser!.uid;
-              var email =await FirebaseAuth.instance.currentUser!.email;
+              var uid = FirebaseAuth.instance.currentUser!.uid;
+              var email = FirebaseAuth.instance.currentUser!.email;
 
               final cli = UserModel(
                 uid: uid,
@@ -187,7 +186,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               final res = ReservationModel(
                 user: cli,
                 table: state.tableModel,
-                status: 'INICIO',
+                status: ReservationStatus.started.name,
                 start: APIResources.dateFormat.format(DateTime.now()),
               );
               _reservationBloc!.add(SetReservation(res));
@@ -199,18 +198,17 @@ class _ReservationScreenState extends State<ReservationScreen> {
     );
   }
 
-  Future<String?> joinAlert(
-      BuildContext context, ReservationLoaded state) async {
+  Future<String?> joinAlert(BuildContext context, ReservationLoaded state) async {
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: const Text('Reservacion'),
         content: Text(
-          'Id de reservacion: ${state.reservation.idReservation}'
-          '\nRestaurante: ${state.reservation.table!.branch!.restaurant!.name}'
-          '\nSucursal: ${state.reservation.table!.branch!.name}'
-          '\nMesa para ${state.reservation.table!.size}'
-          '\nReservado por: ${state.reservation.user!.email}',
+          'Id de reservacion: ${state.reservation?.idReservation}'
+          '\nRestaurante: ${state.reservation?.table!.branch!.restaurant!.name}'
+          '\nSucursal: ${state.reservation?.table!.branch!.name}'
+          '\nMesa para ${state.reservation?.table!.size}'
+          '\nReservado por: ${state.reservation?.user!.email}',
           style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
         ),
         actions: <Widget>[
@@ -220,11 +218,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
           ),
           TextButton(
             onPressed: () {
-              _accountBloc!.add(
-                  GetAccountList(state.reservation.idReservation.toString()));
-              Future.delayed(const Duration(milliseconds: 100), () {
-                Navigator.of(context).pushReplacementNamed('/select_account');
-              });
+              _accountBloc!.add(GetAccountList(state.reservation!.idReservation.toString()));              
             },
             child: const Text('Confirmar'),
           ),

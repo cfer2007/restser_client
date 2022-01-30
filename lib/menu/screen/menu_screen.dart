@@ -1,6 +1,5 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
 
-import '/account/bloc/account_bloc.dart';
 import '/menu/bloc/menu_bloc.dart';
 import '/menu/model/menu_model.dart';
 import '/widgets/my_appbar.dart';
@@ -16,17 +15,17 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   MenuBloc? _menuBloc;
-  AccountBloc? _accountBloc;
+  ReservationBloc? _reservationBloc;
   bool loaded = false;
 
   @override
   void initState() {
     _menuBloc = BlocProvider.of<MenuBloc>(context);
-    _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
+    print(_reservationBloc?.state.reservation!.table!.branch!.restaurant!.idRestaurant!);
     _menuBloc!.add(
       GetMenuList(
-        _accountBloc!.state.account!.reservation!.table!.branch!.restaurant!
-            .idRestaurant!,
+        _reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant!,
       ),
     );
     super.initState();
@@ -49,10 +48,10 @@ class _MenuScreenState extends State<MenuScreen> {
       } else if (state is MenuListLoaded) {
         return _buildCard(context, state.menuList);
       } else if (state is MenuError) {
-        print("MenuError: " + state.message);
         return Container();
-      } else
+      } else {
         return Container();
+      }
     });
   }
 

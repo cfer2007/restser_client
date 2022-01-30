@@ -1,5 +1,5 @@
 import '/account/models/account_model.dart';
-import '/order/models/order_detail_model.dart';
+import 'order_dish_model.dart';
 
 class OrderModel {
   int? idOrder;
@@ -9,7 +9,7 @@ class OrderModel {
   double? totalPrice;
   int? totalUnits;
   AccountModel? account;
-  List<OrderDetailModel>? listOrderDetail;
+  List<OrderDishModel>? listOrderDish;
 
   OrderModel({
     this.idOrder,
@@ -19,13 +19,13 @@ class OrderModel {
     this.totalPrice,
     this.totalUnits,
     this.account,
-    this.listOrderDetail,
+    this.listOrderDish,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-    var list = json['listOrderDetail'] as List;
-    List<OrderDetailModel> listDetail =
-        list.map((i) => OrderDetailModel.fromJson(i)).toList();
+    var list = json['listOrderDish'] as List;
+    List<OrderDishModel>? listDetail = list.map((i) => OrderDishModel.fromJson(i)).toList();
+
 
     return OrderModel(
       idOrder: json['idOrder'],
@@ -34,8 +34,8 @@ class OrderModel {
       status: json['status'],
       totalPrice: json['total_price'],
       totalUnits: json['total_units'],
-      account: AccountModel.fromJson(json['account']),
-      listOrderDetail: listDetail,
+      //account: AccountModel.fromJson(json['account']),
+      listOrderDish: listDetail,
     );
   }
   Map<String, dynamic> toJson() => {
@@ -46,4 +46,16 @@ class OrderModel {
         "total_units": totalUnits,
         "account": {"idAccount": account!.idAccount},
       };
+  Map<String, dynamic> toJsonConfirm() {
+    List list = listOrderDish!.map((e) => e.toJsonConfirm()).toList(); 
+    return{
+        "idOrder": idOrder,
+        "date": date,
+        "description": description,
+        "status": status,
+        "total_price": totalPrice,
+        "total_units": totalUnits,
+        "listOrderDish":list,
+      };
+    }
 }

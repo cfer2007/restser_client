@@ -2,7 +2,7 @@ import 'package:restser_client/login/model/auth_user_request_model.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/order/models/order_model.dart';
-import '/order/models/order_detail_model.dart';
+import '../order/models/order_dish_model.dart';
 import '/reservation/models/reservation_model.dart';
 import '/resources/api_response.dart';
 import 'api_provider.dart';
@@ -34,6 +34,10 @@ class ApiRepository {
     return _provider.getReservation(idReservation);
   }
 
+  Future<APIResponse<Object>> confirmReservation(ReservationModel reservation) {
+    return _provider.confirmReservation(reservation);
+  }
+
   Future<APIResponse<Object>> setAccountList(List<AccountModel> accounts) {
     return _provider.setAccountList(accounts);
   }
@@ -55,7 +59,7 @@ class ApiRepository {
     return _provider.getOrderListByClient(uid);
   }
 
-  Future<APIResponse<bool>> setDishesOrder(List<OrderDetailModel> dishes) {
+  Future<APIResponse<bool>> setDishesOrder(List<OrderDishModel> dishes) {
     return _provider.setDishesOrder(dishes);
   }
 

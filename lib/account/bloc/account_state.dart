@@ -48,6 +48,11 @@ class SetAccountLoaded extends AccountState {
   SetAccountLoaded(this.account);
 }
 
+class GetAccountReservationListLoaded extends AccountState{
+  final List<AccountModel>? accountReservationList;
+  GetAccountReservationListLoaded(this.accountReservationList);
+}
+
 class AccountError extends AccountState {
   final String message;
   AccountError(this.message);

@@ -11,13 +11,13 @@ class AuthUserRequestModel {
     this.uid,
   });
 
-  Map<String, dynamic> toJson() => {
+  /*Map<String, dynamic> toJson() => {
         "email": email,
         "password": password,
         "fcmToken": fcmToken,
-      };
+      };*/
 
-  Map<String, dynamic> toSNJson() => {
+  Map<String, dynamic> toJson() => {
         "uid": uid,
         "email": email,
         "fcmToken": fcmToken,

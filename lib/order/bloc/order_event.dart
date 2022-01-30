@@ -5,7 +5,7 @@ abstract class OrderEvent {
 }
 
 class AddToOrder extends OrderEvent {
-  OrderDetailModel? dish;
+  OrderDishModel? dish;
   AddToOrder({this.dish});
 }
 

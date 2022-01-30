@@ -5,10 +5,10 @@ class MyAppBar extends AppBar {
       : super(key: key, 
           title: Text(title),
           automaticallyImplyLeading: leading,
-          /*leading: IconButton(
+          leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
-          ),*/
+          ),
           centerTitle: true,
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))

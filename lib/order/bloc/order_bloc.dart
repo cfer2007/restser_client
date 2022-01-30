@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import '/order/models/order_model.dart';
-import '/order/models/order_detail_model.dart';
+import '../models/order_dish_model.dart';
 import '/resources/api_repository.dart';
 import 'package:bloc/bloc.dart';
 
@@ -13,7 +13,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final ApiRepository _apiRepository = ApiRepository();
   OrderBloc() : super(OrderInitial());
 
-  List<OrderDetailModel> dishes = [];
+  List<OrderDishModel> dishes = [];
   int? count = 0;
   double? total = 0;
   int? idOrder = 0;
@@ -40,7 +40,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         if (listOrder.error) {
           yield OrderError(listOrder.errorMessage as String);
         } else {
-          //List<OrderModel> list = listOrder.data as List<OrderModel>;
           yield OrderListByClientLoaded(listOrder.data as List<OrderModel>);
         }
       }
@@ -81,9 +80,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           yield OrderError(resOrder.errorMessage as String);
         } else {
           idOrder = int.parse(resOrder.data as String);
-          dishes.forEach((element) {
+          for (var element in dishes) {
             element.idOrder = idOrder; //int.parse(resOrder.data),
-          });
+          }
           final resDetailOrder = await _apiRepository.setDishesOrder(dishes);
           if (resDetailOrder.error) {
             yield OrderDetailError(resDetailOrder.errorMessage as String);
@@ -100,7 +99,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
-  Stream<OrderState> _addElement(OrderDetailModel dish) async* {
+  Stream<OrderState> _addElement(OrderDishModel dish) async* {
     dishes.add(dish);
     this.count = this.count! + 1;
     this.total = this.total! + dish.price!;
@@ -122,7 +121,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         );
   }
 
-  Stream<OrderState> _addUnity(OrderDetailModel dish, int index) async* {
+  Stream<OrderState> _addUnity(OrderDishModel dish, int index) async* {
     dishes[index].units = dishes[index].units! + 1;
     this.count = this.count! + 1;
     this.total = this.total! + dish.price!;
@@ -133,7 +132,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         );
   }
 
-  Stream<OrderState> _delUnity(OrderDetailModel dish, int index) async* {
+  Stream<OrderState> _delUnity(OrderDishModel dish, int index) async* {
     if (dishes[index].units == 1) {
       this.count = this.count! - 1;
       this.total = this.total! - dish.price!;

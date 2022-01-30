@@ -20,4 +20,6 @@ class APIResources {
   static const contact = _api + '/contact';
 }
 
-//enum Status { INICIO, PROCESO, ERROR }
+enum ReservationStatus {started, confirmed, finished }
+enum OrderStatus {started, confirmed, processing, ready, delivered, paid }
+enum tableStatus {available, busy}

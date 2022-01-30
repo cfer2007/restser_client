@@ -1,9 +1,11 @@
-import '/account/bloc/account_bloc.dart';
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+
+//import '/account/bloc/account_bloc.dart';
 import '/dish/bloc/dish_bloc.dart';
 import '/dish/models/dish_model.dart';
 import '/menu/bloc/menu_bloc.dart';
 import '/order/bloc/order_bloc.dart';
-import '/order/models/order_detail_model.dart';
+import '../../order/models/order_dish_model.dart';
 import '/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,20 +22,19 @@ class DishListScreen extends StatefulWidget {
 class _DishListScreenState extends State<DishListScreen> {
   DishBloc? _dishBloc;
   MenuBloc? _menuBloc;
-  AccountBloc? _accountBloc;
+  ReservationBloc? _reservationBloc;
   OrderBloc? _orderBloc;
-  List<OrderDetailModel> dishes = <OrderDetailModel>[];
+  List<OrderDishModel> dishes = <OrderDishModel>[];
 
   @override
   void initState() {
     _dishBloc = BlocProvider.of<DishBloc>(context);
     _menuBloc = BlocProvider.of<MenuBloc>(context);
-    _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     _orderBloc = BlocProvider.of<OrderBloc>(context);
 
     _dishBloc!.add(GetDishList(
-        _accountBloc!.state.account!.reservation!.table!.branch!.idBranch
-            .toString(),
+        _reservationBloc!.state.reservation!.table!.branch!.idBranch.toString(),
         _menuBloc!.state.menuList![widget.index].idMenu.toString()));
     super.initState();
   }
@@ -93,7 +94,7 @@ class _DishListScreenState extends State<DishListScreen> {
                         onPressed: () {
                           _orderBloc!.add(
                             AddToOrder(
-                              dish: OrderDetailModel(
+                              dish: OrderDishModel(
                                 idDish: dishes[index].idDish!,
                                 name: dishes[index].name!,
                                 currency: dishes[index].currency!,

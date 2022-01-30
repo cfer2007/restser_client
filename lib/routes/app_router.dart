@@ -1,3 +1,5 @@
+import 'package:restser_client/reservation/models/reservation_model.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/account/screens/account_screen.dart';
 import '/account/screens/choose_type_account_screen.dart';
@@ -42,6 +44,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
               BlocProvider<OrderBloc>.value(
                 value: _orderBloc,
               ),
@@ -99,6 +104,9 @@ class AppRouter {
               BlocProvider<ContactBloc>.value(
                 value: _contactBloc,
               ),
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
             ],
             child: const MultiAccountScreen(),
           ),
@@ -110,6 +118,9 @@ class AppRouter {
             providers: [
               BlocProvider<AccountBloc>.value(
                 value: _accountBloc,
+              ),
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
               ),
             ],
             child: const SelectAccountScreen(),
@@ -135,8 +146,8 @@ class AppRouter {
               BlocProvider<MenuBloc>.value(
                 value: _menuBloc,
               ),
-              BlocProvider<AccountBloc>.value(
-                value: _accountBloc,
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
               ),
             ],
             child: const MenuScreen(),
@@ -147,8 +158,8 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
-              BlocProvider<AccountBloc>.value(
-                value: _accountBloc,
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
               ),
               BlocProvider<MenuBloc>.value(
                 value: _menuBloc,
