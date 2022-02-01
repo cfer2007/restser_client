@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: must_be_immutable
 class DishListScreen extends StatefulWidget {
   int index;
-  DishListScreen({required this.index});
+  DishListScreen({Key? key, required this.index}) : super(key: key);
 
   @override
   _DishListScreenState createState() => _DishListScreenState();

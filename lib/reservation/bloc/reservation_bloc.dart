@@ -62,11 +62,11 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
           yield ReservationConfirmed();
         }
       }
-      if(event is Increment){
+      if(event is IncrementUnits){
         yield* _addDish(event.indexAccount, event.indexOrder, event.indexDish);
       }
 
-      if(event is Decrement){
+      if(event is DecrementUnits){
         yield* _deleteDish(event.indexAccount, event.indexOrder, event.indexDish);
       }
 

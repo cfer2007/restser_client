@@ -1,4 +1,5 @@
 import 'package:restser_client/login/model/auth_user_request_model.dart';
+import 'package:restser_client/services/notification_model.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/order/models/order_model.dart';
@@ -81,6 +82,9 @@ class ApiRepository {
 
   Future<APIResponse<Object>> getAccountListByClient(int uid) {
     return _provider.getAccountListByClient(uid);
+  }
+  Future<APIResponse<Object>> sendNotification(NotificationModel notification){
+    return _provider.sendNotification(notification);
   }
 }
 

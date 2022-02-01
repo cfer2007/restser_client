@@ -6,14 +6,15 @@ import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
 import 'package:restser_client/resources/api_resources.dart';
 import 'package:restser_client/widgets/my_appbar.dart';
 
-class ReservationOrderList extends StatefulWidget {
-  const ReservationOrderList({Key? key}) : super(key: key);
+class ConfirmReservationScreen extends StatefulWidget {
+  String idReservation;
+  ConfirmReservationScreen({Key? key, required this.idReservation}) : super(key: key);
 
   @override
-  _ReservationOrderListState createState() => _ReservationOrderListState();
+  _ConfirmReservationScreenState createState() => _ConfirmReservationScreenState();
 }
 
-class _ReservationOrderListState extends State<ReservationOrderList> {
+class _ConfirmReservationScreenState extends State<ConfirmReservationScreen> {
   ReservationBloc? _reservationBloc;
   int count = 0;
   bool loaded=false;
@@ -22,7 +23,7 @@ class _ReservationOrderListState extends State<ReservationOrderList> {
   @override
   void initState(){
     _reservationBloc = BlocProvider.of<ReservationBloc>(context);
-    _reservationBloc!.add(GetReservationAll(3 /*_reservationBloc!.state.reservation!.idReservation.toString()*/));
+    _reservationBloc!.add(GetReservationAll(widget.idReservation));
     super.initState();
   }
 
@@ -116,7 +117,7 @@ class _ReservationOrderListState extends State<ReservationOrderList> {
             color: Colors.black,
             onPressed: () {              
               if(dish.units! > 0){
-                _reservationBloc?.add(Decrement(indexAccount: indexAccount,  indexOrder: indexOrder, indexDish: indexDish)); 
+                _reservationBloc?.add(DecrementUnits(indexAccount: indexAccount,  indexOrder: indexOrder, indexDish: indexDish)); 
               }
             },
           ),
@@ -125,7 +126,7 @@ class _ReservationOrderListState extends State<ReservationOrderList> {
             icon: const Icon(Icons.add),
             color: Colors.black,
             onPressed: () {    
-              _reservationBloc?.add(Increment(indexAccount: indexAccount,  indexOrder: indexOrder, indexDish: indexDish));                                                                     
+              _reservationBloc?.add(IncrementUnits(indexAccount: indexAccount,  indexOrder: indexOrder, indexDish: indexDish));                                                                     
             },
           ),
         ],

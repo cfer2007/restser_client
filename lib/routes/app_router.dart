@@ -1,4 +1,6 @@
 import 'package:restser_client/reservation/models/reservation_model.dart';
+import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
+import 'package:restser_client/services/push_notifications_service.dart';
 
 import '/account/bloc/account_bloc.dart';
 import '/account/screens/account_screen.dart';
@@ -185,6 +187,9 @@ class AppRouter {
               BlocProvider<OrderBloc>.value(
                 value: _orderBloc,
               ),
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
             ],
             child: const OrderScreen(),
           ),
@@ -227,6 +232,17 @@ class AppRouter {
             ],
             child: ReservationScreen(
                 arguments: settings.arguments as ReservationArguments),
+          ),
+        );
+      case '/confirm_reservation_screen':
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
+            ],
+            child: ConfirmReservationScreen(idReservation: settings.arguments as String,),
           ),
         );
 

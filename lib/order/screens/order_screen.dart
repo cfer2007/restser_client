@@ -1,3 +1,8 @@
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+import 'package:restser_client/reservation/widgets/reservation_arguments.dart';
+import 'package:restser_client/resources/api_repository.dart';
+import 'package:restser_client/services/notification_model.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/order/bloc/order_bloc.dart';
 import '/order/models/order_model.dart';
@@ -16,15 +21,36 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   OrderBloc? _orderBloc;
   AccountBloc? _accountBloc;
+  ReservationBloc? _reservationBloc;
+  final ApiRepository _apiRepository = ApiRepository();
   @override
   Widget build(BuildContext context) {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
     _orderBloc = BlocProvider.of<OrderBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     return BlocConsumer<OrderBloc, OrderState>(
       bloc: _orderBloc,
       listener: (context, state) {
         if (state.setDishesStatus != null && state.setDishesStatus == true) {
-          Navigator.of(context).pushNamed('/order_success');
+          if(_accountBloc!.state.account!.user!.uid == _reservationBloc!.state.reservation!.user!.uid){
+            Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: _reservationBloc!.state.reservation!.idReservation!.toString());
+          }
+          else{
+            Map<String, String> map = {
+              'id_reservation': _reservationBloc!.state.reservation!.idReservation!.toString(),
+              'action': 'order_setted',
+            };
+            _apiRepository.sendNotification(
+              NotificationModel(
+                uid: _reservationBloc!.state.reservation!.user!.uid,
+                title: "orden ingresada",
+                message: "El usuario ${_accountBloc!.state.account!.user!.email} ha ingresado una nueva orden a su reservacion",
+                data: map,
+              )
+            );
+            Navigator.of(context).pushNamed('/order_success');
+          }
+          
         }
         //_alert('Exito', 'La orden fue ingresada con exito', Colors.green);
         if (state is OrderError) {

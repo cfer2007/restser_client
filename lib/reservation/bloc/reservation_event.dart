@@ -14,7 +14,7 @@ class GetReservation extends ReservationEvent {
   GetReservation(this.idReservation);
 }
 class GetReservationAll extends ReservationEvent {
-  final int idReservation;
+  final String idReservation;
   GetReservationAll(this.idReservation);
 }
 
@@ -28,18 +28,18 @@ class ConfirmReservation extends ReservationEvent {
   ConfirmReservation(this.reservation);
 }
 
-class Increment extends ReservationEvent{
+class IncrementUnits extends ReservationEvent{
   int indexAccount;
   int indexOrder;
   int indexDish;
-  Increment({required this.indexAccount, required this.indexOrder, required this.indexDish});
+  IncrementUnits({required this.indexAccount, required this.indexOrder, required this.indexDish});
 }
 
-class Decrement extends ReservationEvent{
+class DecrementUnits extends ReservationEvent{
   int indexAccount;
   int indexOrder;
   int indexDish;
-  Decrement({required this.indexAccount, required this.indexOrder, required this.indexDish});
+  DecrementUnits({required this.indexAccount, required this.indexOrder, required this.indexDish});
 }
 
 class ClearReservationBloc extends ReservationEvent {}

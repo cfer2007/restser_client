@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     BlocProvider.of<LoginBloc>(context).add(AuthUser(AuthUserRequestModel(
         uid: _auth.currentUser!.uid,
         email: _auth.currentUser!.email, 
-        fcmToken: await PushNotificationsService.initiallizeApp())));
+        fcmToken: await PushNotificationsService.initiallizeApp())));        
   }
 
   Future<String> _signInWithEmailAndPassword(LoginData data) async {
@@ -52,8 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
       GoogleSignInAuthentication gsa = await googleSignInAccount!.authentication;
       await _auth.signInWithCredential(GoogleAuthProvider.credential(idToken: gsa.idToken, accessToken: gsa.accessToken));
       addUserBloc(_auth);
-      //print('token: '+ await _auth.currentUser!.getIdToken());
-      
       return '';
     } catch (error) {
       return 'error';

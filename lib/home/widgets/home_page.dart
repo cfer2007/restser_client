@@ -1,4 +1,5 @@
 import 'package:restser_client/reservation/widgets/reservation_arguments.dart';
+import 'package:restser_client/services/push_notifications_service.dart';
 import '/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  /*@override
+  void initState() {
+    super.initState();
+
+    PushNotificationsService.messagesStream.listen((message) { 
+      //message.
+      print(message.notification!.body);
+      //Navigator.of(context).pushNamed('/account_screen');
+    });
+      
+  }*/
 
   @override
   Widget build(BuildContext context) {

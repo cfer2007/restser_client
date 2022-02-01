@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restser_client/login/model/auth_user_request_model.dart';
+import 'package:restser_client/services/notification_model.dart';
 import '/account/models/account_model.dart';
 import '/contact/models/contact_model.dart';
 import '/dish/models/dish_model.dart';
@@ -497,6 +498,30 @@ class ApiProvider{
                 'Content-Type': 'application/json',
               },
               body: req);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return APIResponse<Object>(error: false);
+      } else {
+        return APIResponse<bool>(error: true, errorMessage: response.body);
+      }
+    } catch (error, stacktrace) {
+      return APIResponse<bool>(
+          error: true,
+          errorMessage: "Exception occured: $error stackTrace: $stacktrace");
+    }
+  }
+  Future<APIResponse<Object>> sendNotification(NotificationModel notification) async {
+    try{
+      final token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      var jsonNotification = json.encode(notification);
+      print(jsonNotification);
+      final response =
+          await http.post(Uri.parse('${APIResources.notification}/order_setted'),
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+              },
+              body: jsonNotification);
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(error: false);
       } else {

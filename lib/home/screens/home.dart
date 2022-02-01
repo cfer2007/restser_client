@@ -1,4 +1,5 @@
-import 'package:restser_client/reservation/screens/reservation_order_list.dart';
+import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
+import 'package:restser_client/services/push_notifications_service.dart';
 
 import '/account/screens/account_screen.dart';
 import '/home/widgets/home_page.dart';
@@ -20,7 +21,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     const HomePage(),
     const RestauratPage(),
-    const ReservationOrderList(),//ReservationListScreen(),
+    const ReservationListScreen(),//ReservationListScreen(),
     //ContactScreen(),
     const AccountScreen(),
   ];
@@ -29,6 +30,17 @@ class _HomeState extends State<Home> {
   void initState() {
     _selectedIndex = widget.index;
     super.initState();
+    PushNotificationsService.messagesStream.listen((message) { 
+      print(message);
+      String? id;
+      message.data.forEach((key, value) {
+        if(key == 'id_reservation') {
+          id=value;
+          print('idReservation: $value');
+        }
+      });
+      Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: id);
+    });
   }
 
   void _onItemTapped(int index) {
@@ -36,7 +48,7 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
