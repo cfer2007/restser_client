@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+  String idRestaurant;
+  MenuScreen({Key? key, required this.idRestaurant}) : super(key: key);
 
   @override
   _MenuScreenState createState() => _MenuScreenState();
@@ -15,17 +16,14 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   MenuBloc? _menuBloc;
-  ReservationBloc? _reservationBloc;
   bool loaded = false;
 
   @override
   void initState() {
     _menuBloc = BlocProvider.of<MenuBloc>(context);
-    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
-    print(_reservationBloc?.state.reservation!.table!.branch!.restaurant!.idRestaurant!);
     _menuBloc!.add(
       GetMenuList(
-        _reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant!,
+        widget.idRestaurant
       ),
     );
     super.initState();

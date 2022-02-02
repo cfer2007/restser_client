@@ -27,22 +27,31 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   }
 
   Future init() async {
-    uid = await FirebaseAuth.instance.currentUser!.uid;//await UserSecureStorage().getUid();
-    _orderBloc!.add(GetOrderListByClient(uid: uid));
+    //uid = await FirebaseAuth.instance.currentUser!.uid;//await UserSecureStorage().getUid();
+    //_orderBloc!.add(GetOrderListByClient(uid: uid));
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      
       length: 2,
       child: Scaffold(
         //drawer: SideMenuScreen(),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           bottom:
-              const TabBar(tabs: [Tab(text: 'ACTIVAS'), Tab(text: 'FINALIZADAS')]),
+            TabBar(
+              onTap: (index){
+                print(index);
+              },
+              tabs: [Tab(text: 'ACTIVAS'), Tab(text: 'FINALIZADAS')]
+            ),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
+            IconButton(onPressed: () {}, 
+            icon: const Icon(Icons.notifications))
           ],
           title: const Center(child: Text('Reservaciones')),
         ),
@@ -57,7 +66,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   }
 
   Widget _builListOrder(List<OrderModel> list) {
-    return BlocBuilder<OrderBloc, OrderState>(builder: (context, state) {
+    return Container();
+    /*return BlocBuilder<OrderBloc, OrderState>(builder: (context, state) {
       if (state is OrderListLoading) {
         return _buildLoading();
       } else if (state is OrderListByClientLoaded) {
@@ -76,10 +86,10 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       } else {
         return Container();
       }
-    });
+    });*/
   }
 
-  Widget _buildCard(BuildContext context, List<OrderModel> list) {
+  /*Widget _buildCard(BuildContext context, List<OrderModel> list) {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -143,7 +153,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
         );
       },
     );
-  }
+  }*/
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
 }
+

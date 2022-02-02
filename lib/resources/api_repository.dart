@@ -19,7 +19,7 @@ class ApiRepository {
     return _provider.getUserList(uid);
   }
 
-  Future<APIResponse<Object>> getMenuList(int idRestaurante) {
+  Future<APIResponse<Object>> getMenuList(String idRestaurante) {
     return _provider.getMenuList(idRestaurante);
   }
 
@@ -56,9 +56,9 @@ class ApiRepository {
     return _provider.setOrder(order);
   }
 
-  Future<APIResponse<Object>> getOrderListByClient(String uid) {
+  /*Future<APIResponse<Object>> getOrderListByClient(String uid) {
     return _provider.getOrderListByClient(uid);
-  }
+  }*/
 
   Future<APIResponse<bool>> setDishesOrder(List<OrderDishModel> dishes) {
     return _provider.setDishesOrder(dishes);

@@ -6,6 +6,6 @@ abstract class MenuEvent {
 }
 
 class GetMenuList extends MenuEvent {
-  final int idRestaurante;
+  final String idRestaurante;
   GetMenuList(this.idRestaurante);
 }

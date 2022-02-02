@@ -1,7 +1,4 @@
-import 'package:restser_client/reservation/models/reservation_model.dart';
 import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
-import 'package:restser_client/services/push_notifications_service.dart';
-
 import '/account/bloc/account_bloc.dart';
 import '/account/screens/account_screen.dart';
 import '/account/screens/choose_type_account_screen.dart';
@@ -148,11 +145,8 @@ class AppRouter {
               BlocProvider<MenuBloc>.value(
                 value: _menuBloc,
               ),
-              BlocProvider<ReservationBloc>.value(
-                value: _reservationBloc,
-              ),
             ],
-            child: const MenuScreen(),
+            child: MenuScreen(idRestaurant: settings.arguments as String),
           ),
         );
 

@@ -1,3 +1,7 @@
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+import 'package:restser_client/resources/api_repository.dart';
+import 'package:restser_client/services/notification_model.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/contact/bloc/contact_bloc.dart';
 import '/widgets/my_appbar.dart';
@@ -15,11 +19,14 @@ class ChooseTypeAccountScreen extends StatefulWidget {
 class _ChooseTypeAccountScreenState extends State<ChooseTypeAccountScreen> {
   ContactBloc? _contactBloc;
   AccountBloc? _accountBloc;
+  ReservationBloc? _reservationBloc;
+  
 
   @override
   Widget build(BuildContext context) {
     _contactBloc = BlocProvider.of<ContactBloc>(context);
     _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     return BlocConsumer<ContactBloc, ContactState>(
       bloc: _contactBloc,
       listener: (context, state) {
@@ -85,9 +92,8 @@ class _ChooseTypeAccountScreenState extends State<ChooseTypeAccountScreen> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      '/menu',
-                    );
+                    print('idRestaurante!!:  ${_reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant}');
+                    Navigator.of(context).pushNamed('/menu', arguments: _reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant.toString());
                   },
                 ),
               ],

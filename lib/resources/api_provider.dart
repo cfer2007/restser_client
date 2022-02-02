@@ -64,10 +64,9 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getMenuList(int id) async {
+  Future<APIResponse<Object>> getMenuList(String id) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
-
       final response = await http.get(
         Uri.parse('${APIResources.menu}/$id'),
         headers: {
@@ -75,7 +74,6 @@ class ApiProvider{
           'Content-Type': 'application/json',
         },
       );
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(
@@ -174,7 +172,6 @@ class ApiProvider{
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       String jsonRes = json.encode(res.toJsonConfirm());
-      print(jsonRes);
       final response = await http.put(Uri.parse(APIResources.reservation),
           headers: {
             'Authorization': 'Bearer $token',
@@ -310,7 +307,6 @@ class ApiProvider{
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(
@@ -358,7 +354,7 @@ class ApiProvider{
     }
   }
 
-  Future<APIResponse<Object>> getOrderListByClient(String uid) async {
+  /*Future<APIResponse<Object>> getOrderListByClient(String uid) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -384,14 +380,13 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
   Future<APIResponse<Object>> setOrder(OrderModel order) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonOrder = json.encode(order);
-      print(jsonOrder);
       final response = await http.post(Uri.parse(APIResources.order),
           headers: {
             'Authorization': 'Bearer $token',
@@ -513,7 +508,6 @@ class ApiProvider{
     try{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       var jsonNotification = json.encode(notification);
-      print(jsonNotification);
       final response =
           await http.post(Uri.parse('${APIResources.notification}/order_setted'),
               headers: {
@@ -521,7 +515,6 @@ class ApiProvider{
                 'Content-Type': 'application/json',
               },
               body: jsonNotification);
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(error: false);
       } else {

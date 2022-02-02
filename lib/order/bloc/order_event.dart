@@ -29,10 +29,10 @@ class SetOrder extends OrderEvent {
   SetOrder({this.order});
 }
 
-class GetOrderListByClient extends OrderEvent {
+/*class GetOrderListByClient extends OrderEvent {
   String? uid;
   GetOrderListByClient({this.uid});
-}
+}*/
 
 class ClearOrderBloc extends OrderEvent {}
 

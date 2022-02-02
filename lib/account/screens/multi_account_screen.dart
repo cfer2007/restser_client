@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_new
 
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+import 'package:restser_client/resources/api_repository.dart';
+import 'package:restser_client/services/notification_model.dart';
 
 import '/account/bloc/account_bloc.dart';
 import '/account/models/account_model.dart';
@@ -28,6 +30,8 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
   ReservationBloc? _reservationBloc;
   Future<List<ContactModel>>? myFuture;
 
+  final ApiRepository _apiRepository = ApiRepository();
+
   Future<List<ContactModel>> getData() async {
     data = _contactBloc!.state.contactList!;
     selectedSpinnerItem = data[0].username;
@@ -49,9 +53,7 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
       listener: (context, state) {
         if (state.setAccountListStatus != null &&
             state.setAccountListStatus == true) {
-          Navigator.of(context).pushNamed(
-            '/menu',
-          );
+          Navigator.of(context).pushNamed('/menu', arguments: _reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant.toString());
         }
         if (state is AccountError) print(state.message);
       },
@@ -107,6 +109,27 @@ class _MultiAccountScreenState extends State<MultiAccountScreen> {
               floatingActionButton: FloatingActionButton.extended(
                 label: const Text("Guardar"),
                 onPressed: () {
+                  //crear alerta para consultar si desea enviar notificacion de la reservacion a los usuarios agregados
+                    //{
+                    _accountBloc!.accountList.forEach((element) { 
+                      print('idRestaurante: ${_reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant.toString()}');
+                      
+                      Map<String, String> map = {
+                        'action': 'RESERVATION_SETTED',
+                        'id': '1',//_reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant.toString(),              
+                      };
+                      print('${element.user!.uid } -- ${element.user!.email}');
+                      _apiRepository.sendNotification(
+                        NotificationModel(
+                          uid: element.user!.uid,
+                          title: "Invitacion a Reservacion",
+                          message: "El usuario ${_accountBloc!.state.account!.user!.email} te ha agregado a una reservacion para que puedas agregar ordenes",
+                          data: map,
+                        )
+                      );  
+                    });
+                    
+                    //}
                   _accountBloc!.add(SetAccountList(_accountBloc!.accountList));
                 },
               ),

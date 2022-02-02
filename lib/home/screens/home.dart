@@ -31,15 +31,26 @@ class _HomeState extends State<Home> {
     _selectedIndex = widget.index;
     super.initState();
     PushNotificationsService.messagesStream.listen((message) { 
-      print(message);
-      String? id;
+       String? id;
+      String? action;
       message.data.forEach((key, value) {
-        if(key == 'id_reservation') {
+        print('key $key, value $value');
+        if(key == 'action') {
+          print('action $value');
+          action = value;
+        }
+        else if(key == 'id') {
+          print('id $id');
           id=value;
-          print('idReservation: $value');
         }
       });
-      Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: id);
+
+      if(action == 'ORDER_SETTED') {
+        Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: id);
+      }
+      if(action == 'RESERVATION_SETTED') {
+        Navigator.of(context).pushNamed('/menu',arguments: id);
+      }
     });
   }
 

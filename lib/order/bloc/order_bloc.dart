@@ -34,7 +34,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         yield OrderError(event.message);
       }
 
-      if (event is GetOrderListByClient) {
+      /*if (event is GetOrderListByClient) {
         final listOrder =
             await _apiRepository.getOrderListByClient(event.uid!);
         if (listOrder.error) {
@@ -42,7 +42,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         } else {
           yield OrderListByClientLoaded(listOrder.data as List<OrderModel>);
         }
-      }
+      }*/
       if (event is AddToOrder) {
         if (dishes.isEmpty) {
           yield* _addElement(event.dish!);

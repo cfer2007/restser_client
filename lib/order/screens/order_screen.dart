@@ -37,8 +37,8 @@ class _OrderScreenState extends State<OrderScreen> {
           }
           else{
             Map<String, String> map = {
-              'id_reservation': _reservationBloc!.state.reservation!.idReservation!.toString(),
-              'action': 'order_setted',
+              'action': 'ORDER_SETTED',
+              'id': _reservationBloc!.state.reservation!.idReservation!.toString(),              
             };
             _apiRepository.sendNotification(
               NotificationModel(
