@@ -50,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {                  
       GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication gsa = await googleSignInAccount!.authentication;
+      print(gsa.idToken);
       await _auth.signInWithCredential(GoogleAuthProvider.credential(idToken: gsa.idToken, accessToken: gsa.accessToken));
       addUserBloc(_auth);
       return '';

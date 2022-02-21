@@ -14,7 +14,8 @@ class ContactModel {
       this.idFriend,
       this.email,
       this.username,
-      this.date});
+      this.date
+  });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) => ContactModel(
         idContact: json['idContact'],

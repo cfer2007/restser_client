@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:restser_client/account/models/account_model.dart';
 
 import '/user/models/user_model.dart';
@@ -51,9 +49,7 @@ class ReservationModel {
     return {
         "idReservation": idReservation,
         "status": status,
-        "start": start,
-        //"user": user,
-        //"table": table,
+        //"start": start,
         "listAccount": list,
       };    
   }

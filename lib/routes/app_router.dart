@@ -1,4 +1,6 @@
+import 'package:restser_client/order_reservation/bloc/order_reservation_bloc.dart';
 import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
+import 'package:restser_client/reservation/screens/tracking_reservation_screen.dart';
 import '/account/bloc/account_bloc.dart';
 import '/account/screens/account_screen.dart';
 import '/account/screens/choose_type_account_screen.dart';
@@ -26,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AppRouter {
   final TableBloc _tableBloc = TableBloc();
   final ReservationBloc _reservationBloc = ReservationBloc();
+  final OrderReservationBloc _orderReservationBloc = OrderReservationBloc();
   final AccountBloc _accountBloc = AccountBloc();
   final MenuBloc _menuBloc = MenuBloc();
   final DishBloc _dishBloc = DishBloc();
@@ -54,6 +57,9 @@ class AppRouter {
               ),
               BlocProvider<UserBloc>.value(
                 value: _userBloc,
+              ),
+              BlocProvider<OrderReservationBloc>.value(
+                value: _orderReservationBloc,
               ),
             ],
             child: Home(index: settings.arguments as int),
@@ -236,10 +242,23 @@ class AppRouter {
                 value: _reservationBloc,
               ),
             ],
-            child: ConfirmReservationScreen(idReservation: settings.arguments as String,),
+            child: const ConfirmReservationScreen(),
           ),
         );
-
+      case '/reservation_tracking_screen':
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<OrderReservationBloc>.value(
+                value: _orderReservationBloc,
+              ),
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
+            ],
+            child: const ReservationTrackingScreen(),
+          ),
+        );
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
@@ -254,5 +273,6 @@ class AppRouter {
     _orderBloc.close();
     _contactBloc.close();
     _userBloc.close();
+    _orderReservationBloc.close();
   }
 }

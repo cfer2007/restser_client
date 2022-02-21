@@ -1,3 +1,5 @@
+import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
+
 import '/account/bloc/account_bloc.dart';
 import '/account/models/account_model.dart';
 import '/widgets/my_appbar.dart';
@@ -16,6 +18,7 @@ class _SelectAccountScreenState extends State<SelectAccountScreen> {
   List<AccountModel> data = <AccountModel>[];
   String? selectedSpinnerItem;
   AccountBloc? _accountBloc;
+  ReservationBloc? _reservationBloc;
   Future<List<AccountModel>>? myFuture;
   AccountModel? selectedAccount;
 
@@ -29,6 +32,7 @@ class _SelectAccountScreenState extends State<SelectAccountScreen> {
   @override
   void initState() {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     myFuture = getData();
     super.initState();
   }
@@ -89,7 +93,7 @@ class _SelectAccountScreenState extends State<SelectAccountScreen> {
                 label: const Text("Confirmar"),
                 onPressed: () {
                   _accountBloc!.add(JoinAccount(selectedAccount!));
-                  Navigator.of(context).pushNamed('/menu',);
+                  Navigator.of(context).pushNamed('/menu', arguments: _reservationBloc!.state.reservation!.table!.branch!.restaurant!.idRestaurant.toString());
                 }),
           );
         });

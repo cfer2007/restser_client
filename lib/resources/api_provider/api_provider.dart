@@ -8,7 +8,7 @@ import '/dish/models/dish_model.dart';
 import '/menu/model/menu_model.dart';
 import '/user/models/user_model.dart';
 import '/order/models/order_model.dart';
-import '../order/models/order_dish_model.dart';
+import '../../order/models/order_dish_model.dart';
 import '/reservation/models/reservation_model.dart';
 import '/resources/api_resources.dart';
 import '/resources/api_response.dart';
@@ -17,7 +17,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider{   
 
-  Future<APIResponse<Object>> authUser(AuthUserRequestModel user) async {
+  /*Future<APIResponse<Object>> authUser(AuthUserRequestModel user) async {
     try {
       String jsonSignup = json.encode(user.toJson());
       final response = await http.post(Uri.parse(APIResources.authUser),
@@ -35,9 +35,9 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getUserList(String uid) async {
+  /*Future<APIResponse<Object>> getUserList(String uid) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -62,9 +62,9 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getMenuList(String id) async {
+  /*Future<APIResponse<Object>> getMenuList(String id) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       final response = await http.get(
@@ -88,9 +88,9 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getTable(String idTable) async {
+  /*Future<APIResponse<Object>> getTable(String idTable) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();//await UserSecureStorage().getToken();
       final response = await http.get(
@@ -112,13 +112,14 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> postReservation(ReservationModel res) async {
+  /*Future<APIResponse<Object>> postReservation(ReservationModel res) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       String jsonRes = json.encode(res.toJson());
+      print(jsonRes);
       final response = await http.post(Uri.parse(APIResources.reservation),
           headers: {
             'Authorization': 'Bearer $token',
@@ -172,6 +173,7 @@ class ApiProvider{
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       String jsonRes = json.encode(res.toJsonConfirm());
+      print(jsonRes);
       final response = await http.put(Uri.parse(APIResources.reservation),
           headers: {
             'Authorization': 'Bearer $token',
@@ -192,9 +194,9 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getAccountListByClient(int uid) async {
+  /*Future<APIResponse<Object>> getAccountListByClient(int uid) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -322,9 +324,9 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getBranchDishesList(
+  /*Future<APIResponse<Object>> getBranchDishesList(
       String idBranch, String idMenu) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
@@ -352,7 +354,7 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 
   /*Future<APIResponse<Object>> getOrderListByClient(String uid) async {
     try {
@@ -382,7 +384,7 @@ class ApiProvider{
     }
   }*/
 
-  Future<APIResponse<Object>> setOrder(OrderModel order) async {
+  /*Future<APIResponse<Object>> setOrder(OrderModel order) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -403,9 +405,9 @@ class ApiProvider{
           error: true,
           errorMessage: 'Exception occured: $error stackTrace: $stacktrace');
     }
-  }
+  }*/
 
-  Future<APIResponse<bool>> setDishesOrder(List<OrderDishModel> dishes) async {
+  /*Future<APIResponse<bool>> setDishesOrder(List<OrderDishModel> dishes) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -426,9 +428,9 @@ class ApiProvider{
           error: true,
           errorMessage: 'Exception occured: $error stackTrace: $stacktrace');
     }
-  }
+  }*/
 
-  Future<APIResponse<Object>> getContactList(String uid) async {
+  /*Future<APIResponse<Object>> getContactList(String uid) async {
     try {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
@@ -503,8 +505,8 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
-  Future<APIResponse<Object>> sendNotification(NotificationModel notification) async {
+  }*/
+  /*Future<APIResponse<Object>> sendNotification(NotificationModel notification) async {
     try{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       var jsonNotification = json.encode(notification);
@@ -525,5 +527,5 @@ class ApiProvider{
           error: true,
           errorMessage: "Exception occured: $error stackTrace: $stacktrace");
     }
-  }
+  }*/
 }

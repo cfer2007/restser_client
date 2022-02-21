@@ -36,7 +36,6 @@ class ContactListLoaded extends ContactState {
 
 class FriendListLoaded extends ContactState {
   List<ContactModel>? contactList;
-
   FriendListLoaded(this.contactList);
 }
 

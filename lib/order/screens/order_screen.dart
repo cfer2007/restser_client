@@ -1,5 +1,4 @@
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
-import 'package:restser_client/reservation/widgets/reservation_arguments.dart';
 import 'package:restser_client/resources/api_repository.dart';
 import 'package:restser_client/services/notification_model.dart';
 
@@ -23,6 +22,8 @@ class _OrderScreenState extends State<OrderScreen> {
   AccountBloc? _accountBloc;
   ReservationBloc? _reservationBloc;
   final ApiRepository _apiRepository = ApiRepository();
+  String? currency;
+
   @override
   Widget build(BuildContext context) {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
@@ -33,7 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
       listener: (context, state) {
         if (state.setDishesStatus != null && state.setDishesStatus == true) {
           if(_accountBloc!.state.account!.user!.uid == _reservationBloc!.state.reservation!.user!.uid){
-            Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: _reservationBloc!.state.reservation!.idReservation!.toString());
+            Navigator.of(context).pushNamed('/home', arguments: 2);
           }
           else{
             Map<String, String> map = {
@@ -98,6 +99,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           color: Colors.red,
                         ),
                         onPressed: () {
+                          
                           _orderBloc!.add(DelFromOrder(index: index));
                         },
                       )
@@ -110,8 +112,11 @@ class _OrderScreenState extends State<OrderScreen> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
-              label: Text('Ordenar: ' + '${state.total}'),
+              label: Text('Ordenar: ${state.total}'),
               onPressed: () {
+                print(state.dishes![0].currency);
+                          print(currency);
+                          currency = state.dishes![0].currency;
                 state.dishes!.isNotEmpty
                     ? BlocProvider.of<OrderBloc>(context).add(SetOrder(
                         order: OrderModel(
@@ -121,6 +126,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         date: APIResources.dateFormat.format(DateTime.now()),
                         totalPrice: state.total,
                         totalUnits: state.count,
+                        currency: currency,
                       )))
                     : BlocProvider.of<OrderBloc>(context).add(
                         SetOrderError('No hay platos para agregar a la orden'));

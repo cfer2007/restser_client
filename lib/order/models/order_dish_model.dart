@@ -29,6 +29,14 @@ class OrderDishModel {
       units: json['units'],
     );
   }
+  factory OrderDishModel.fromJsonOrderReservation(Map<String, dynamic> json) {
+    return OrderDishModel(
+      name: json['name'],
+      currency: json['currency'],
+      price: json['price'],
+      units: json['units'],
+    );
+  }
   Map<String, dynamic> toJson() => {
         "idDish": idDish,
         "order": {"idOrder": idOrder},

@@ -1,15 +1,16 @@
-import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
+import 'package:restser_client/home/widgets/restaurant_page.dart';
+import 'package:restser_client/reservation/screens/tracking_reservation_screen.dart';
 import 'package:restser_client/services/push_notifications_service.dart';
 
 import '/account/screens/account_screen.dart';
 import '/home/widgets/home_page.dart';
-import '../../reservation/screens/reservation_list_screen.dart';
-import '/home/widgets/restaurant_page.dart';
+//import '../../reservation/screens/reservation_list_screen.dart';
+//import '/home/widgets/restaurant_page.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final int index;
-  Home({required this.index});
+  const Home({required this.index});
 
   @override
   _HomeState createState() => _HomeState();
@@ -21,8 +22,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     const HomePage(),
     const RestauratPage(),
-    const ReservationListScreen(),//ReservationListScreen(),
-    //ContactScreen(),
+    const ReservationTrackingScreen(),//const ReservationListScreen(),//ConfirmReservationScreen(idReservation: "1"),//const ReservationListScreen(),
     const AccountScreen(),
   ];
 
@@ -34,13 +34,13 @@ class _HomeState extends State<Home> {
        String? id;
       String? action;
       message.data.forEach((key, value) {
-        print('key $key, value $value');
+        //print('key $key, value $value');
         if(key == 'action') {
-          print('action $value');
+          //print('action $value');
           action = value;
         }
         else if(key == 'id') {
-          print('id $id');
+          //print('id $id');
           id=value;
         }
       });

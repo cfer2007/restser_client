@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:restser_client/order/models/order_dish_model.dart';
+import 'package:restser_client/reservation/models/reservation_finish_model.dart';
+import 'package:restser_client/reservation/models/reservation_active_model.dart';
 
 import '/reservation/models/reservation_model.dart';
 import '/resources/api_repository.dart';
@@ -42,26 +43,39 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
           yield ReservationLoaded(res.data as ReservationModel);
         }
       }
-      if (event is GetReservationAll) {
+
+      if (event is GetReservationFinishedList) {
         yield ReservationLoading();
-        print('GetReservationAll');
-        final res = await _apiRepository.getReservation(event.idReservation.toString());
+        final res = await _apiRepository.getFinishReservationList(event.uid);
         if (res.error) {
           yield ReservationError(res.errorMessage as String);
         } else {
-          state.copyWith(reservation: res.data as ReservationModel);
-          yield ReservationLoadedAll(res.data as ReservationModel);
+          state.copyWith(reservationFinishedList: res.data as List<ReservationFinishModel>);
+          yield ReservationFinishedListLoaded(res.data as List<ReservationFinishModel>);
         }
       }
+
+      if (event is GetActiveReservation) {
+        yield ReservationLoading();
+        final res = await _apiRepository.getOrdersActiveByReservation(event.uid);
+        if (res.error) {
+          yield ReservationError(res.errorMessage as String);
+        } else {
+          state.copyWith(reservationOrdersActive: res.data as ReservationActiveModel);
+          yield ReservationOrdersActiveLoaded(res.data as ReservationActiveModel);
+        }
+      }
+
       if(event is ConfirmReservation){
         final result = await _apiRepository.confirmReservation(event.reservation);
         if(result.error){
-          print('error ConfirmReservation ${result.errorMessage}');
           yield ReservationError(result.errorMessage as String);
         } else {
           yield ReservationConfirmed();
         }
       }
+      
+
       if(event is IncrementUnits){
         yield* _addDish(event.indexAccount, event.indexOrder, event.indexDish);
       }
@@ -71,49 +85,48 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       }
 
     } on NetworkError {
-      print('network error');
       yield ReservationError("Failed to fetch data. is your device online?");
     }
   }
 
   Stream<ReservationState> _addDish(int indexAccount, int indexOrder, int indexDish) async*{
-    //unidades por plato
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units 
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units! 
+      //unidades por plato
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units 
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units! 
       + 1;
     //precio total de orden
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalPrice 
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalPrice! 
-      + state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice 
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice! 
+      + state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
     //unidades totales por orden
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalUnits
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
       + 1 ;
     //precio total de cuenta
-    state.reservation!.listAccount![indexAccount].subtotal 
-      = state.reservation!.listAccount![indexAccount].subtotal! 
-      + state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+    state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
+      = state.reservationOrdersActive!.listAccount![indexAccount].subtotal! 
+      + state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
     
-    yield state.copyWith(reservation: state.reservation);
+    yield state.copyWith(reservationOrdersActive: state.reservationOrdersActive);
   }
   Stream<ReservationState> _deleteDish(int indexAccount, int indexOrder, int indexDish) async*{
     //unidades por plato
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units 
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units! 
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units 
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units! 
       - 1;
     //precio total de orden
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalPrice 
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalPrice! 
-      - state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice 
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice! 
+      - state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
     //unidades totales por orden
-    state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalUnits
-      = state.reservation!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
+    state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits
+      = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
       + 1 ;
     //precio total de cuenta
-    state.reservation!.listAccount![indexAccount].subtotal 
-      = state.reservation!.listAccount![indexAccount].subtotal! 
-      - state.reservation!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+    state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
+      = state.reservationOrdersActive!.listAccount![indexAccount].subtotal! 
+      - state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
 
-    yield state.copyWith(reservation: state.reservation);
+    yield state.copyWith(reservationOrdersActive: state.reservationOrdersActive);
   }
 }

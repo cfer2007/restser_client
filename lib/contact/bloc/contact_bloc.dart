@@ -30,6 +30,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
           if (contactList.error) {
             yield ContactError(contactList.errorMessage as String);
           } else {
+            print('');
+            print(contactList.data);
+            print('');
             this.contactList = contactList.data as List<ContactModel>;
             if (event.isMultiAccount) {
               yield ContactListLoaded(contactList.data as List<ContactModel>);

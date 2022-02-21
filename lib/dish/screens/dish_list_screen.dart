@@ -85,7 +85,7 @@ class _DishListScreenState extends State<DishListScreen> {
                     ),
                   ),
                   title: Text(dishes[index].name!),
-                  subtitle: Text(dishes[index].description!),
+                  subtitle: Text('${dishes[index].description!}\n${dishes[index].currency!}${dishes[index].price!}'),
                   onTap: () {},
                   trailing: Wrap(
                     children: <Widget>[

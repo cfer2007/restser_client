@@ -1,5 +1,4 @@
 import 'package:restser_client/reservation/widgets/reservation_arguments.dart';
-import 'package:restser_client/services/push_notifications_service.dart';
 import '/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -11,19 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  /*@override
-  void initState() {
-    super.initState();
-
-    PushNotificationsService.messagesStream.listen((message) { 
-      //message.
-      print(message.notification!.body);
-      //Navigator.of(context).pushNamed('/account_screen');
-    });
-      
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +20,7 @@ class _HomePageState extends State<HomePage> {
           direction: Axis.vertical,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Bienvenid@",
-              style: const TextStyle(fontSize: 25),
+            const Text("Bienvenid@",style: TextStyle(fontSize: 25),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(
@@ -65,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                   qrBtnIcon: const Icon(Icons.qr_code),
                   isNewReservation: false,
                 );
-                Navigator.of(context).pushReplacementNamed(
+                Navigator.of(context).pushNamed(
                     '/reservation_screen',
                     arguments: arguments);
               },
@@ -91,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                   qrBtnIcon: const Icon(Icons.qr_code),
                   isNewReservation: true,
                 );
-                Navigator.of(context).pushReplacementNamed(
+                Navigator.of(context).pushNamed(
                     '/reservation_screen',
                     arguments: arguments);
               },

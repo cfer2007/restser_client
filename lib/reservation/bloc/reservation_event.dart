@@ -13,14 +13,15 @@ class GetReservation extends ReservationEvent {
   final String idReservation;
   GetReservation(this.idReservation);
 }
-class GetReservationAll extends ReservationEvent {
-  final String idReservation;
-  GetReservationAll(this.idReservation);
+
+class GetReservationFinishedList extends ReservationEvent {
+  final String uid;
+  GetReservationFinishedList(this.uid);
 }
 
-class GetOrderListByReservation extends ReservationEvent {
-  int? idReservation;
-  GetOrderListByReservation({this.idReservation});
+class GetActiveReservation extends ReservationEvent{
+  final String uid;
+  GetActiveReservation(this.uid);
 }
 
 class ConfirmReservation extends ReservationEvent {

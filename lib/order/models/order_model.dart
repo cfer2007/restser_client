@@ -6,6 +6,7 @@ class OrderModel {
   String? date;
   String? description;
   String? status;
+  String? currency;
   double? totalPrice;
   int? totalUnits;
   AccountModel? account;
@@ -16,6 +17,7 @@ class OrderModel {
     this.date,
     this.description,
     this.status,
+    this.currency,
     this.totalPrice,
     this.totalUnits,
     this.account,
@@ -26,7 +28,6 @@ class OrderModel {
     var list = json['listOrderDish'] as List;
     List<OrderDishModel>? listDetail = list.map((i) => OrderDishModel.fromJson(i)).toList();
 
-
     return OrderModel(
       idOrder: json['idOrder'],
       date: json['date'],
@@ -34,6 +35,7 @@ class OrderModel {
       status: json['status'],
       totalPrice: json['total_price'],
       totalUnits: json['total_units'],
+      currency: json['currency'],
       //account: AccountModel.fromJson(json['account']),
       listOrderDish: listDetail,
     );
@@ -45,6 +47,7 @@ class OrderModel {
         "total_price": totalPrice,
         "total_units": totalUnits,
         "account": {"idAccount": account!.idAccount},
+        "currency": currency,
       };
   Map<String, dynamic> toJsonConfirm() {
     List list = listOrderDish!.map((e) => e.toJsonConfirm()).toList(); 
@@ -56,6 +59,7 @@ class OrderModel {
         "total_price": totalPrice,
         "total_units": totalUnits,
         "listOrderDish":list,
+        
       };
     }
 }

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:restser_client/routes/app_router.dart';
 
 import '/widgets/my_appbar.dart';
 import '/account/widgets/profile_menu.dart';
@@ -47,6 +48,7 @@ class AccountScreen extends StatelessWidget {
               icon: const Icon(Icons.logout),
               press: () async {
                 await FirebaseAuth.instance.signOut();
+                AppRouter().dispose();
                 Navigator.pushNamedAndRemoveUntil(
                     context, "/", (Route<dynamic> route) => false);
               },

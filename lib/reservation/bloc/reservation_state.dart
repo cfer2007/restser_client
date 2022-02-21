@@ -1,15 +1,24 @@
 part of 'reservation_bloc.dart';
 
 class ReservationState {
-  ReservationModel? reservation;
+  ReservationModel? reservation;  
+  List<ReservationFinishModel>? reservationFinishedList;
+  ReservationActiveModel? reservationOrdersActive;
+
   ReservationState({
     this.reservation,
+    this.reservationFinishedList,
+    this.reservationOrdersActive,
   });
   ReservationState copyWith( {
-    ReservationModel? reservation,
+    ReservationModel? reservation,  
+    List<ReservationFinishModel>? reservationFinishedList,  
+    ReservationActiveModel? reservationOrdersActive,
   }){
     return ReservationState(
       reservation:  reservation ?? this.reservation,
+      reservationFinishedList: reservationFinishedList?? this.reservationFinishedList,
+      reservationOrdersActive: reservationOrdersActive?? this.reservationOrdersActive,
     );
   }
 }
@@ -27,9 +36,14 @@ class ReservationLoaded extends ReservationState {
   ReservationLoaded(this.reservation);
 }
 
-class ReservationLoadedAll extends ReservationState {
-  final ReservationModel? reservation;
-  ReservationLoadedAll(this.reservation);
+class ReservationFinishedListLoaded extends ReservationState {
+  final List<ReservationFinishModel>? reservationFinishedList;
+  ReservationFinishedListLoaded(this.reservationFinishedList);
+}
+
+class ReservationOrdersActiveLoaded extends ReservationState {
+  final ReservationActiveModel? reservationOrdersActive;
+  ReservationOrdersActiveLoaded(this.reservationOrdersActive);
 }
 
 class ReservationSetted extends ReservationState {
