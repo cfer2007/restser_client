@@ -5,16 +5,30 @@ import 'package:restser_client/order_reservation/bloc/order_reservation_bloc.dar
 import 'package:restser_client/order_reservation/models/dishes_order_reservation_model.dart';
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
 import 'package:restser_client/reservation/models/reservation_finish_model.dart';
+import 'package:restser_client/resources/api_resources.dart';
 
-class TrackingReservationWidget extends StatelessWidget {
+class TrackingReservationWidget extends StatefulWidget {
+  const TrackingReservationWidget({Key? key}) : super(key: key);
+
+  @override
+  State<TrackingReservationWidget> createState() => _TrackingReservationWidgetState();
+}
+
+class _TrackingReservationWidgetState extends State<TrackingReservationWidget> {
   ReservationBloc? _reservationBloc;  
   OrderReservationBloc? _orderReservationBloc;
-  TrackingReservationWidget(this._reservationBloc, this._orderReservationBloc,{Key? key}) : super(key: key);
+  bool floatingActionButtonVisible = false;
+  
+  @override
+  void initState() {    
+    _orderReservationBloc = BlocProvider.of<OrderReservationBloc>(context);
+    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
+    _orderReservationBloc!.add(GetOrderReservationList(FirebaseAuth.instance.currentUser!.uid));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _orderReservationBloc = BlocProvider.of<OrderReservationBloc>(context);
-    _reservationBloc = BlocProvider.of<ReservationBloc>(context);
     final _uid = FirebaseAuth.instance.currentUser!.uid;
     return DefaultTabController(      
       length: 2,
@@ -45,22 +59,56 @@ class TrackingReservationWidget extends StatelessWidget {
             _buildListOrderReservationActive(),
             _buildReservationFinishedList()
           ],
+        ),     
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,   
+        floatingActionButton: Visibility(
+          visible:  floatingActionButtonVisible,
+          child: FloatingActionButton.extended(
+            onPressed: (){
+              //print(_orderReservationBloc!.state.dishesOrderReservationList![0].orderReservation!.idReservation);
+              Navigator.of(context).pushNamed('/finish_reservation_screen', arguments: _orderReservationBloc!.state.dishesOrderReservationList![0].orderReservation!.idReservation);
+            }, 
+            label: const Text('Finalizar Reservacion'),
+          ),
         ),
       ),
     );
   }
 
+  
+
   Widget _buildListOrderReservationActive(){
-    return BlocBuilder<OrderReservationBloc, OrderReservationState>(builder: (context, state){
-      if(state is OrderReservationListLoaded){    
-        print('OrderReservationListLoaded');
-        return _buildCardOrdersActive(context, state.dishesOrderReservationList!);
+    return BlocConsumer<OrderReservationBloc, OrderReservationState>(
+      listener: (context, state){
+        if(state is OrderReservationListLoaded){   
+          int cont = 0;
+          for (var item in state.dishesOrderReservationList!) {
+            if(item.orderReservation!.status == OrderStatus.delivered.name){
+              cont++;
+            }
+          }
+          if((cont == state.dishesOrderReservationList!.length) && state.dishesOrderReservationList!.isNotEmpty) {
+            setState(() {
+              floatingActionButtonVisible = true;   
+            });
+          }
+          else {
+            setState(() {
+              floatingActionButtonVisible = false;
+            });
+          }
+        }
+        
+      },
+      builder: (context, state){
+        if(state is OrderReservationListLoaded){    
+          return _buildCardOrdersActive(context, state.dishesOrderReservationList!);
+        }
+        else {
+          return _buildLoading();
+        }
       }
-      else {
-        return _buildLoading();
-      }
-    });
-    
+    );    
   }
 
   Widget _buildReservationFinishedList(){
@@ -85,6 +133,7 @@ class TrackingReservationWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 const Text('Estado de Orden'),
+                
                 for(int i=0;i<orderReservationList[index].orderReservation!.listOrderReservationDetail!.length;i++)
                   ListTile(
                     title: Text(orderReservationList[index].orderReservation!.listOrderReservationDetail![i].status!),

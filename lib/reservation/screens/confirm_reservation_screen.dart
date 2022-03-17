@@ -1,14 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:restser_client/account/models/account_model.dart';
 import 'package:restser_client/order/models/order_dish_model.dart';
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
-import 'package:restser_client/reservation/models/reservation_active_model.dart';
 import 'package:restser_client/reservation/models/reservation_model.dart';
 import 'package:restser_client/resources/api_resources.dart';
 import 'package:restser_client/widgets/my_appbar.dart';
-import 'dart:convert';
 
 class ConfirmReservationScreen extends StatefulWidget {
   const ConfirmReservationScreen({Key? key}) : super(key: key);
@@ -37,12 +34,11 @@ class _ConfirmReservationScreenState extends State<ConfirmReservationScreen> {
               label: const Text('Confirmar Ordenes'),
               onPressed: () { 
                 ReservationModel res = ReservationModel();
-                res.idReservation = _reservationBloc!.state.reservationOrdersActive!.idReservation;
+                res.idReservation = _reservationBloc!.state.reservationOrdersActive!.reservation!.idReservation;
                 res.status = ReservationStatus.confirmed.name;
                 res.listAccount = _reservationBloc!.state.reservationOrdersActive!.listAccount;
+  
 
-
-                //print(json.encode(_reservationBloc!.state.reservationOrdersActive!.listAccount));
                 _reservationBloc!.add(ConfirmReservation(res));
                 Navigator.pop(context);
 
@@ -57,23 +53,13 @@ class _ConfirmReservationScreenState extends State<ConfirmReservationScreen> {
       }
      },
      child: _buildReservationCard(),
-    );
-    
-    /*return BlocBuilder<ReservationBloc,ReservationState>(
-      builder: (context,state){
-        if(state is ReservationOrdersActiveLoaded){
-          return _buildReservationCard(context, state.reservationOrdersActive!);
-        } else {
-          return _buildLoading();
-        }
-      }
-    );*/
+    );    
   }
 
-  Widget _buildReservationCard(/*BuildContext context, ReservationActiveModel res*/){
+  Widget _buildReservationCard(){
     return Column(
         children: [
-          Text('Reservation: ${_reservationBloc!.state.reservationOrdersActive!.idReservation}'),
+          Text('Reservation: ${_reservationBloc!.state.reservationOrdersActive!.reservation!.idReservation}'),
           _buildAccountCard(_reservationBloc!.state.reservationOrdersActive!.listAccount!)
         ],    
       

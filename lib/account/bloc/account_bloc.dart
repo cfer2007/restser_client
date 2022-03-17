@@ -55,8 +55,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         if (result.error) {
           yield AccountError(result.errorMessage as String);
         } else {
-          state.copyWith(
-              accountReservationList: result.data as List<AccountModel>);
+          state.copyWith(accountReservationList: result.data as List<AccountModel>);
           yield GetAccountReservationListLoaded(result.data as List<AccountModel>);
         }
       }
@@ -69,8 +68,32 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
               .copyWith(accountListByClient: res.data as List<AccountModel>);
         }
       }
+      if (event is CalculateTip) {
+        yield* _calculeteTip(event.percentage, event.indexAccount);
+      }
+
     } catch (e) {
       print('error: account_bloc');
     }
+  }
+
+  Stream<AccountState> _calculeteTip(int percentage, int indexAccount) async* {
+    print('_calculeteTip');
+
+    state.accountReservationList![indexAccount].tipPercentage = percentage;
+
+    state.accountReservationList![indexAccount].tip 
+    = double.parse(((state.accountReservationList![indexAccount].subtotal! + state.accountReservationList![indexAccount].tax!) 
+    * (percentage/100)).toStringAsFixed(2));
+
+    state.accountReservationList![indexAccount].total 
+    = state.accountReservationList![indexAccount].subtotal! 
+    + state.accountReservationList![indexAccount].tax!
+    + state.accountReservationList![indexAccount].tip!;
+
+    print(state.accountReservationList![indexAccount].tip);
+
+    yield state.copyWith(accountReservationList: state.accountReservationList!);
+    yield GetAccountReservationListLoaded(state.accountReservationList!);
   }
 }

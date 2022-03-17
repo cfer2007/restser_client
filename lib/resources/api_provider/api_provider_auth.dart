@@ -11,6 +11,7 @@ class ApiProviderAuth {
       final response = await http.post(Uri.parse(APIResources.authUser),
           headers: APIResources.header, body: jsonSignup);
       final parsedJson = json.decode(response.body);
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
             error: false, 

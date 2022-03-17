@@ -34,15 +34,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         yield OrderError(event.message);
       }
 
-      /*if (event is GetOrderListByClient) {
-        final listOrder =
-            await _apiRepository.getOrderListByClient(event.uid!);
-        if (listOrder.error) {
-          yield OrderError(listOrder.errorMessage as String);
-        } else {
-          yield OrderListByClientLoaded(listOrder.data as List<OrderModel>);
-        }
-      }*/
       if (event is AddToOrder) {
         if (dishes.isEmpty) {
           yield* _addElement(event.dish!);
@@ -81,7 +72,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         } else {
           idOrder = int.parse(resOrder.data as String);
           for (var element in dishes) {
-            element.idOrder = idOrder; //int.parse(resOrder.data),
+            element.idOrder = idOrder; 
           }
           final resDetailOrder = await _apiRepository.setDishesOrder(dishes);
           if (resDetailOrder.error) {

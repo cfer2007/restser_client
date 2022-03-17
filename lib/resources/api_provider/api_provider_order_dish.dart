@@ -15,6 +15,7 @@ class ApiProviderOrderDish{
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
           body: jsonDishes);
       if (response.statusCode == 200 || response.statusCode == 201) {

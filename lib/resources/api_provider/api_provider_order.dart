@@ -11,11 +11,11 @@ class ApiProviderOrder{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       var jsonOrder = json.encode(order);
-      print(jsonOrder);
       final response = await http.post(Uri.parse(APIResources.order),
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
           body: jsonOrder);
       if (response.statusCode == 200 || response.statusCode == 201) {

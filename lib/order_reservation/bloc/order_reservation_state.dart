@@ -1,17 +1,17 @@
 part of 'order_reservation_bloc.dart';
 
 class OrderReservationState {
-  /*List<OrderReservationModel>? orderReservationList;
+  List<DishesOrderReservationModel>? dishesOrderReservationList;
   OrderReservationState({
-    this.orderReservationList,
+    this.dishesOrderReservationList,
   });
   OrderReservationState copyWith( {
-    OrderReservationModel? orderReservationList,    
+    List<DishesOrderReservationModel>? dishesOrderReservationList,
   }){
     return OrderReservationState(
-      orderReservationList:  orderReservationList ?? this.orderReservationList,     
+      dishesOrderReservationList:  dishesOrderReservationList ?? this.dishesOrderReservationList,     
     );
-  }*/
+  }
 }
 
 class OrderReservationInitial extends OrderReservationState {}

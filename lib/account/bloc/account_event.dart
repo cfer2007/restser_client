@@ -43,4 +43,10 @@ class GetAccountListByClient extends AccountEvent {
   GetAccountListByClient(this.uid);
 }
 
+class CalculateTip extends AccountEvent {
+  int percentage;
+  int indexAccount;
+  CalculateTip(this.percentage, this.indexAccount);
+}
+
 class ClearAccountBloc extends AccountEvent {}

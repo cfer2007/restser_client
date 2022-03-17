@@ -20,6 +20,8 @@ class APIResources {
   static const branchDish = _api + '/branch_dish';
   static const contact = _api + '/contact';
   static const notification = _api + '/notification';
+  static const tip = _api + '/tip';
+  static const tax = _api + '/tax';
 }
 
 enum ReservationStatus {started, confirmed, finished }

@@ -59,8 +59,7 @@ class _OrderSuccessState extends State<OrderSuccess> {
                 onPressed: () {
                   BlocProvider.of<OrderBloc>(context).add(ClearOrderBloc());
                   BlocProvider.of<ContactBloc>(context).add(ClearContactBloc());
-                  BlocProvider.of<ReservationBloc>(context)
-                      .add(ClearReservationBloc());
+                  BlocProvider.of<ReservationBloc>(context).add(ClearReservationBloc());
                   const Duration(milliseconds: 1000);
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/menu", (Route<dynamic> route) => false);
@@ -79,8 +78,7 @@ class _OrderSuccessState extends State<OrderSuccess> {
                   BlocProvider.of<OrderBloc>(context).add(ClearOrderBloc());
                   BlocProvider.of<AccountBloc>(context).add(ClearAccountBloc());
                   BlocProvider.of<ContactBloc>(context).add(ClearContactBloc());
-                  BlocProvider.of<ReservationBloc>(context)
-                      .add(ClearReservationBloc());
+                  BlocProvider.of<ReservationBloc>(context).add(ClearReservationBloc());
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/home", (Route<dynamic> route) => false,
                       arguments: 2);

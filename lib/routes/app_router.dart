@@ -1,6 +1,10 @@
 import 'package:restser_client/order_reservation/bloc/order_reservation_bloc.dart';
+import 'package:restser_client/reservation/models/reservation_model.dart';
 import 'package:restser_client/reservation/screens/confirm_reservation_screen.dart';
+import 'package:restser_client/reservation/screens/finish_reservation_screen.dart';
 import 'package:restser_client/reservation/screens/tracking_reservation_screen.dart';
+import 'package:restser_client/tax/bloc/tax_bloc.dart';
+import 'package:restser_client/tip/bloc/tip_bloc.dart';
 import '/account/bloc/account_bloc.dart';
 import '/account/screens/account_screen.dart';
 import '/account/screens/choose_type_account_screen.dart';
@@ -35,6 +39,8 @@ class AppRouter {
   final OrderBloc _orderBloc = OrderBloc();
   final ContactBloc _contactBloc = ContactBloc();
   final UserBloc _userBloc = UserBloc();
+  final TipBloc _tipBloc = TipBloc();
+  final TaxBloc _taxBloc = TaxBloc();
 
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -190,6 +196,9 @@ class AppRouter {
               BlocProvider<ReservationBloc>.value(
                 value: _reservationBloc,
               ),
+              BlocProvider<ContactBloc>.value(
+                value: _contactBloc,
+              ),
             ],
             child: const OrderScreen(),
           ),
@@ -259,6 +268,27 @@ class AppRouter {
             child: const ReservationTrackingScreen(),
           ),
         );
+      case '/finish_reservation_screen':
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<AccountBloc>.value(
+                value: _accountBloc,
+              ),
+              BlocProvider<TipBloc>.value(
+                value: _tipBloc,
+              ),
+              BlocProvider<TaxBloc>.value(
+                value: _taxBloc,
+              ),
+              BlocProvider<ReservationBloc>.value(
+                value: _reservationBloc,
+              ),
+            ],
+            child: FinishReservationScreen(idReservation: settings.arguments as int),
+          ),
+        );
+
       default:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
     }
@@ -274,5 +304,7 @@ class AppRouter {
     _contactBloc.close();
     _userBloc.close();
     _orderReservationBloc.close();
+    _tipBloc.close();
+    _taxBloc.close();
   }
 }

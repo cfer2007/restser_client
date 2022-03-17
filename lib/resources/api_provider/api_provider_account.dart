@@ -11,10 +11,11 @@ class ApiProviderAccount{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
-        Uri.parse('${APIResources.account}/list/$uid'),
+        Uri.parse('${APIResources.account}/listByUid/$uid'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
+          'From':'restserapp',
         },
       );
 
@@ -43,6 +44,7 @@ class ApiProviderAccount{
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
           body: jsonRes);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -68,6 +70,7 @@ class ApiProviderAccount{
               headers: {
                 'Authorization': 'Bearer $token',
                 'Content-Type': 'application/json',
+                'From':'restserapp',
               },
               body: jsonRes);
 
@@ -91,6 +94,7 @@ class ApiProviderAccount{
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
+          'From':'restserapp',
         },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -112,12 +116,14 @@ class ApiProviderAccount{
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
 
       final response = await http.get(
-        Uri.parse('${APIResources.account}/reservation/$idReservation'),
+        Uri.parse('${APIResources.account}/listByIdReservation/$idReservation'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
+          'From':'restserapp',
         },
       );
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         List jsonResponse = json.decode(response.body);
         return APIResponse<Object>(

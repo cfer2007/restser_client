@@ -103,9 +103,14 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
       + 1 ;
     //precio total de cuenta
-    state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
+    /*state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
       = state.reservationOrdersActive!.listAccount![indexAccount].subtotal! 
       + state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units);
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice);
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits);*/
+    //print(state.reservationOrdersActive!.listAccount![indexAccount].subtotal );
     
     yield state.copyWith(reservationOrdersActive: state.reservationOrdersActive);
   }
@@ -123,9 +128,14 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       = state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits!
       + 1 ;
     //precio total de cuenta
-    state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
+    /*state.reservationOrdersActive!.listAccount![indexAccount].subtotal 
       = state.reservationOrdersActive!.listAccount![indexAccount].subtotal! 
       - state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].price!;
+
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].listOrderDish![indexDish].units);
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalPrice);
+    print(state.reservationOrdersActive!.listAccount![indexAccount].listOrder![indexOrder].totalUnits);*/
+    //print(state.reservationOrdersActive!.listAccount![indexAccount].subtotal );
 
     yield state.copyWith(reservationOrdersActive: state.reservationOrdersActive);
   }

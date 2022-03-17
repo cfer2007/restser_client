@@ -1,3 +1,4 @@
+import 'package:restser_client/contact/bloc/contact_bloc.dart';
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
 import 'package:restser_client/resources/api_repository.dart';
 import 'package:restser_client/services/notification_model.dart';
@@ -34,7 +35,11 @@ class _OrderScreenState extends State<OrderScreen> {
       listener: (context, state) {
         if (state.setDishesStatus != null && state.setDishesStatus == true) {
           if(_accountBloc!.state.account!.user!.uid == _reservationBloc!.state.reservation!.user!.uid){
-            Navigator.of(context).pushNamed('/home', arguments: 2);
+            BlocProvider.of<OrderBloc>(context).add(ClearOrderBloc());
+            BlocProvider.of<AccountBloc>(context).add(ClearAccountBloc());
+            BlocProvider.of<ContactBloc>(context).add(ClearContactBloc());
+            BlocProvider.of<ReservationBloc>(context).add(ClearReservationBloc());
+            Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false,arguments: 2);
           }
           else{
             Map<String, String> map = {
@@ -114,9 +119,7 @@ class _OrderScreenState extends State<OrderScreen> {
           floatingActionButton: FloatingActionButton.extended(
               label: Text('Ordenar: ${state.total}'),
               onPressed: () {
-                print(state.dishes![0].currency);
-                          print(currency);
-                          currency = state.dishes![0].currency;
+                currency = state.dishes![0].currency;
                 state.dishes!.isNotEmpty
                     ? BlocProvider.of<OrderBloc>(context).add(SetOrder(
                         order: OrderModel(

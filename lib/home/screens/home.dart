@@ -34,13 +34,10 @@ class _HomeState extends State<Home> {
        String? id;
       String? action;
       message.data.forEach((key, value) {
-        //print('key $key, value $value');
         if(key == 'action') {
-          //print('action $value');
           action = value;
         }
         else if(key == 'id') {
-          //print('id $id');
           id=value;
         }
       });

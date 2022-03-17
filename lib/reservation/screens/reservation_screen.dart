@@ -97,7 +97,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               print(state.message);
             }
           },
-        )
+        ),
       ],
       child: _screen(),
     );

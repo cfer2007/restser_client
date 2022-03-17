@@ -16,12 +16,7 @@ class PushNotificationsService {
   }
 
   static Future _onMessageHandler(RemoteMessage message) async{
-    _messageStream.add(message);
-    message.data.forEach((key, value) {
-      print('value $value');
-      print('key $key');
-    });
-    
+    _messageStream.add(message);    
   }
 
   static Future _onMessageOpenApp(RemoteMessage message) async{    
@@ -41,8 +36,7 @@ class PushNotificationsService {
   static Future initiallizeApp() async {
     await Firebase.initializeApp();
     token = await FirebaseMessaging.instance.getToken();
-    print(token); //dTB9NafVQAWHVKKUKzx5ou:APA91bHsrgI_nJ71u2_IqlDcsbkdVEfR8kQcIPuqtLZEECt2yIII5PDGdLCMqyj-NYelhw-CDrxR8bJgCc16dBZvrhRMyfXUS6lzW7yKfuHh2aN3FnJSvnu1FhGSR_Vc5Fnd49k10jYX
-
+    
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);

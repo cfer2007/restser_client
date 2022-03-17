@@ -11,6 +11,8 @@ import 'package:restser_client/resources/api_provider/api_provider_order_dish.da
 import 'package:restser_client/resources/api_provider/api_provider_order_reservation.dart';
 import 'package:restser_client/resources/api_provider/api_provider_reservation.dart';
 import 'package:restser_client/resources/api_provider/api_provider_table.dart';
+import 'package:restser_client/resources/api_provider/api_provider_tax.dart';
+import 'package:restser_client/resources/api_provider/api_provider_tip.dart';
 import 'package:restser_client/resources/api_provider/api_provider_user.dart';
 import 'package:restser_client/services/notification_model.dart';
 import '/account/models/account_model.dart';
@@ -35,6 +37,8 @@ class ApiRepository {
   final _providerNotification = ApiProviderNotification();
   final _providerReservation = ApiProviderReservation();
   final _providerOrderReservation = ApiProviderOrderReservation();
+  final _providerTip = ApiProviderTip();
+  final _providerTax = ApiProviderTax();
 
   //--------------------- AUTH ---------------------------
   Future<APIResponse<Object>> authUser(AuthUserRequestModel user) {
@@ -118,6 +122,14 @@ class ApiRepository {
   //--------------------- NOTIFICATION ---------------------------
   Future<APIResponse<Object>> sendNotification(NotificationModel notification){
     return _providerNotification.sendNotification(notification);
+  }
+  //--------------------- TIP ---------------------------
+  Future<APIResponse<Object>> getListTip(int idreservation){
+    return _providerTip.getListTip(idreservation);
+  }
+  //--------------------- TAX ---------------------------
+  Future<APIResponse<Object>> getTax(int idreservation){
+    return _providerTax.getTax(idreservation);
   }
 }
 

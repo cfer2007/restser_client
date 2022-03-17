@@ -18,6 +18,7 @@ class ApiProviderReservation {
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
           body: jsonRes);
 
@@ -42,6 +43,7 @@ class ApiProviderReservation {
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
         );
         if (response.statusCode == 200 || response.statusCode == 201) {
@@ -67,13 +69,13 @@ class ApiProviderReservation {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       if(uid.isNotEmpty){
         final response = await http.get(
-          Uri.parse('${APIResources.reservation}/active/$uid'),
+          Uri.parse('${APIResources.reservation}/reservation_active/$uid'),
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
         );
-        //print('response.body ${response.body}');
         if (response.statusCode == 200 || response.statusCode == 201) {
           return APIResponse<Object>(
               error: false,
@@ -101,6 +103,7 @@ class ApiProviderReservation {
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
         );
         print(response.body);
@@ -131,13 +134,14 @@ class ApiProviderReservation {
       final token = await FirebaseAuth.instance.currentUser!.getIdToken();
       if(uid.isNotEmpty){
         final response = await http.get(
-          Uri.parse('${APIResources.reservation}/reservation_active/$uid'),
+          Uri.parse('${APIResources.reservation}/reservation_orders_active/$uid'),
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
         );
-        //print(response.body);
+        print(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
           return APIResponse<Object>(
               error: false,
@@ -165,9 +169,9 @@ class ApiProviderReservation {
           headers: {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
+            'From':'restserapp',
           },
           body: jsonRes);
-      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return APIResponse<Object>(
               error: false,
