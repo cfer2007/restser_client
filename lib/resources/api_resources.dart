@@ -6,8 +6,6 @@ class APIResources {
   static const _api = 'http://10.0.2.2:8080';
   static const header = {'Content-Type': 'application/json'};
 
-  //static const signInEmail = _api + '/auth/signInWithEmailAndPassword';
-  //static const signUpEmail = _api + '/auth/signUpWithEmailAndPassword';
   static const authUser = _api + '/auth/signUpUser';
   static const user = _api + '/user';
   static const table = _api + '/table';
@@ -25,5 +23,6 @@ class APIResources {
 }
 
 enum ReservationStatus {started, confirmed, finished }
-enum OrderStatus {started, confirmed, processing, ready, delivered, paid }
+enum OrderReservationStatus {started, confirmed, processing, ready, delivered, collecting, finished }
+enum AccountStatus {started, collecting, payed}
 enum tableStatus {available, busy}

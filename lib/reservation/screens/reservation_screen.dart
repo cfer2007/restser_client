@@ -78,6 +78,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
             } else if (state is ReservationSetted) {
               _accountBloc!.add(SetAccount(AccountModel(
                   reservation: state.reservation,
+                  status: AccountStatus.started.name,
                   user: UserModel(uid: state.reservation?.user!.uid))));
             } else if (state is ReservationError) {
               errorAlert("La Reservacion no es valida");

@@ -34,7 +34,10 @@ class _OrderScreenState extends State<OrderScreen> {
       bloc: _orderBloc,
       listener: (context, state) {
         if (state.setDishesStatus != null && state.setDishesStatus == true) {
+          print(_accountBloc!.state.account!.user!.uid);
+          print(_reservationBloc!.state.reservation!.user!.uid);
           if(_accountBloc!.state.account!.user!.uid == _reservationBloc!.state.reservation!.user!.uid){
+            
             BlocProvider.of<OrderBloc>(context).add(ClearOrderBloc());
             BlocProvider.of<AccountBloc>(context).add(ClearAccountBloc());
             BlocProvider.of<ContactBloc>(context).add(ClearContactBloc());
@@ -125,7 +128,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         order: OrderModel(
                         account: _accountBloc!.state.account,
                         description: 'desc',
-                        status: OrderStatus.started.name,
+                        //status: OrderStatus.started.name,
                         date: APIResources.dateFormat.format(DateTime.now()),
                         totalPrice: state.total,
                         totalUnits: state.count,

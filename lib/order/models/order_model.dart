@@ -5,7 +5,7 @@ class OrderModel {
   int? idOrder;
   String? date;
   String? description;
-  String? status;
+  //String? status;
   String? currency;
   double? totalPrice;
   int? totalUnits;
@@ -16,7 +16,7 @@ class OrderModel {
     this.idOrder,
     this.date,
     this.description,
-    this.status,
+    //this.status,
     this.currency,
     this.totalPrice,
     this.totalUnits,
@@ -32,7 +32,7 @@ class OrderModel {
       idOrder: json['idOrder'],
       date: json['date'],
       description: json['description'],
-      status: json['status'],
+      //status: json['status'],
       totalPrice: json['total_price'],
       totalUnits: json['total_units'],
       currency: json['currency'],
@@ -43,7 +43,7 @@ class OrderModel {
   Map<String, dynamic> toJson() => {
         "date": date,
         "description": description,
-        "status": status,
+        //"status": status,
         "total_price": totalPrice,
         "total_units": totalUnits,
         "account": {"idAccount": account!.idAccount},
@@ -55,7 +55,7 @@ class OrderModel {
         "idOrder": idOrder,
         "date": date,
         "description": description,
-        "status": status,
+        //"status": status,
         "total_price": totalPrice,
         "total_units": totalUnits,
         "listOrderDish":list,

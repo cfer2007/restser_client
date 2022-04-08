@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:restser_client/login/widgets/user_secure_storage.dart';
 
 import '/contact/models/contact_model.dart';
 import '/user/bloc/user_bloc.dart';
 import '/user/models/user_model.dart';
 import '/contact/bloc/contact_bloc.dart';
 import '/contact/widgets/contact_list.dart';
-//import '/login/bloc/login_bloc.dart';
 import '/resources/api_resources.dart';
 import '/widgets/my_appbar.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -38,7 +36,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   Future init() async {
-    uid = await await FirebaseAuth.instance.currentUser!.uid;//UserSecureStorage().getUid();
+    uid = FirebaseAuth.instance.currentUser!.uid;
     _userBloc!.add(GetUserList(uid));
   }
 
@@ -182,10 +180,6 @@ class _ContactScreenState extends State<ContactScreen> {
           TextButton(
             onPressed: () => {
               Navigator.pop(context, 'Ok')
-              /*title.toLowerCase() == 'error'
-                  ? Navigator.pop(context, 'Ok')
-                  : Navigator.pop(context)*/
-              //.pushReplacementNamed('/home', arguments: 3)
             },
             child: const Text('Ok'),
           ),

@@ -1,3 +1,4 @@
+import 'package:restser_client/account/models/collect_account_model.dart';
 import 'package:restser_client/login/model/auth_user_request_model.dart';
 import 'package:restser_client/reservation/models/reservation_active_model.dart';
 import 'package:restser_client/resources/api_provider/api_provider_account.dart';
@@ -70,9 +71,18 @@ class ApiRepository {
     return _providerAccount.getAccountList(idReservation);
   }
 
+  Future<APIResponse<Object>> getCollectAccountList(int idReservation) {
+    return _providerAccount.getCollectAccountList(idReservation);
+  }
+
   Future<APIResponse<Object>> getAccountListByClient(int uid) {
     return _providerAccount.getAccountListByClient(uid);
   }
+
+  Future<APIResponse<Object>> startCollectingAccounts(List<CollectAccountModel> list, String status, int idReservation) {
+    print('api_repository');
+    return _providerAccount.startCollectingAccounts(list, status, idReservation);
+  }  
   //--------------------- ORDER ---------------------------
   Future<APIResponse<Object>> setOrder(OrderModel order) {
     return _providerOrder.setOrder(order);

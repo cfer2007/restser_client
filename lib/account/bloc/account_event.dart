@@ -23,6 +23,11 @@ class GetAccountList extends AccountEvent {
   GetAccountList(this.idReservation);
 }
 
+class GetCollectAccountList extends AccountEvent {
+  final int idReservation;
+  GetCollectAccountList(this.idReservation);
+}
+
 class JoinAccount extends AccountEvent {
   final AccountModel account;
   JoinAccount(this.account);
@@ -47,6 +52,13 @@ class CalculateTip extends AccountEvent {
   int percentage;
   int indexAccount;
   CalculateTip(this.percentage, this.indexAccount);
+}
+
+class StartCollectingAccounts extends AccountEvent{
+  //List<AccountModel> list;
+  String status;
+  int idReservation;
+  StartCollectingAccounts(this.status, this.idReservation);
 }
 
 class ClearAccountBloc extends AccountEvent {}

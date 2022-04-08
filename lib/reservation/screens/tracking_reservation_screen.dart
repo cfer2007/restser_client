@@ -5,7 +5,6 @@ import 'package:restser_client/order_reservation/bloc/order_reservation_bloc.dar
 import 'package:restser_client/order_reservation/models/dishes_order_reservation_model.dart';
 import 'package:restser_client/reservation/bloc/reservation_bloc.dart';
 import 'package:restser_client/reservation/models/reservation_finish_model.dart';
-import 'package:restser_client/reservation/widgets/tracking_reservation_widget.dart';
 import 'package:restser_client/resources/api_resources.dart';
 
 class ReservationTrackingScreen extends StatefulWidget {
@@ -44,7 +43,6 @@ class _TrackingScreenState extends State<ReservationTrackingScreen> {
           _orderReservationBloc!.add(GetOrderReservationList(_uid));
         }
       },
-      //child: const TrackingReservationWidget(),
       child: _buildTrackingReservationView(),
     );
   }
@@ -81,13 +79,17 @@ class _TrackingScreenState extends State<ReservationTrackingScreen> {
             _buildReservationFinishedList()
           ],
         ),     
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,   
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Visibility(
           visible:  floatingActionButtonVisible,
           child: FloatingActionButton.extended(
-            onPressed: (){
-              //print(_orderReservationBloc!.state.dishesOrderReservationList![0].orderReservation!.idReservation);
-              Navigator.of(context).pushNamed('/finish_reservation_screen', arguments: _orderReservationBloc!.state.dishesOrderReservationList![0].orderReservation!.idReservation);
+            onPressed: () async {
+              await Navigator.of(context).pushNamed(
+                '/finish_reservation_screen', arguments: _orderReservationBloc!.state.dishesOrderReservationList![0].orderReservation!.idReservation
+              ).then((_) async {
+                await Future.delayed(const Duration(seconds: 1));
+                _orderReservationBloc!.add(GetOrderReservationList(FirebaseAuth.instance.currentUser!.uid));
+              });
             }, 
             label: const Text('Finalizar Reservacion'),
           ),
@@ -102,7 +104,7 @@ class _TrackingScreenState extends State<ReservationTrackingScreen> {
         if(state is OrderReservationListLoaded){   
           int cont = 0;
           for (var item in state.dishesOrderReservationList!) {
-            if(item.orderReservation!.status == OrderStatus.delivered.name){
+            if(item.orderReservation!.status == OrderReservationStatus.delivered.name){
               cont++;
             }
           }

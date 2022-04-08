@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:restser_client/account/models/collect_account_model.dart';
+
 import '/account/models/account_model.dart';
 import '/resources/api_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -59,6 +61,17 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           yield GetAccountReservationListLoaded(result.data as List<AccountModel>);
         }
       }
+
+      if (event is GetCollectAccountList) {
+        final result = await _apiRepository.getCollectAccountList(event.idReservation);
+        if (result.error) {
+          yield AccountError(result.errorMessage as String);
+        } else {
+          state.copyWith(collectAccountList: result.data as List<CollectAccountModel>);
+          yield CollectAccountListLoaded(result.data as List<CollectAccountModel>);
+        }
+      }
+
       if (event is GetAccountListByClient) {
         final res = await _apiRepository.getAccountListByClient(event.uid);
         if (res.error) {
@@ -72,6 +85,16 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         yield* _calculeteTip(event.percentage, event.indexAccount);
       }
 
+      if(event is StartCollectingAccounts){
+        print('StartCollectingAccounts');
+        final result = await _apiRepository.startCollectingAccounts(state.collectAccountList!, event.status, event.idReservation);
+        if (result.error) {
+          yield AccountError(result.errorMessage as String);
+        } else {
+          StartCollectingAccountsLoaded();
+        }
+      }
+
     } catch (e) {
       print('error: account_bloc');
     }
@@ -80,20 +103,20 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   Stream<AccountState> _calculeteTip(int percentage, int indexAccount) async* {
     print('_calculeteTip');
 
-    state.accountReservationList![indexAccount].tipPercentage = percentage;
+    state.collectAccountList![indexAccount].tipPercentage = percentage;
 
-    state.accountReservationList![indexAccount].tip 
-    = double.parse(((state.accountReservationList![indexAccount].subtotal! + state.accountReservationList![indexAccount].tax!) 
+    state.collectAccountList![indexAccount].tip 
+    = double.parse(((state.collectAccountList![indexAccount].subtotal! + state.collectAccountList![indexAccount].tax!) 
     * (percentage/100)).toStringAsFixed(2));
 
-    state.accountReservationList![indexAccount].total 
-    = state.accountReservationList![indexAccount].subtotal! 
-    + state.accountReservationList![indexAccount].tax!
-    + state.accountReservationList![indexAccount].tip!;
+    state.collectAccountList![indexAccount].total 
+    = state.collectAccountList![indexAccount].subtotal! 
+    + state.collectAccountList![indexAccount].tax!
+    + state.collectAccountList![indexAccount].tip!;
 
-    print(state.accountReservationList![indexAccount].tip);
+    print(state.collectAccountList![indexAccount].tip);
 
-    yield state.copyWith(accountReservationList: state.accountReservationList!);
-    yield GetAccountReservationListLoaded(state.accountReservationList!);
+    yield state.copyWith(collectAccountList: state.collectAccountList!);
+    yield CollectAccountListLoaded(state.collectAccountList!);
   }
 }

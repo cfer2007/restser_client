@@ -6,12 +6,13 @@ import '/reservation/models/reservation_model.dart';
 class AccountModel {
   int? idAccount;
   double? subtotal;
-  int? tipPercentage;
-  double? tip;
-  int? taxPercentage;
-  double? tax;  
-  double? total;
+  //int? tipPercentage;
+  //double? tip;
+  //int? taxPercentage;
+  //double? tax;  
+  //double? total;
   UserModel? user;
+  String? status;
   ReservationModel? reservation;
   List<OrderModel>? listOrder=[];
 
@@ -21,11 +22,12 @@ class AccountModel {
     required this.user,
     this.reservation,
     this.listOrder,
-    this.tax,
-    this.taxPercentage,
-    this.tip,
-    this.tipPercentage,
-    this.total,
+    //this.tax,
+    //this.taxPercentage,
+    //this.tip,
+    //this.tipPercentage,
+    //this.total,
+    this.status,
   });
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     var list = json['listOrder'] as List;
@@ -35,17 +37,18 @@ class AccountModel {
       idAccount: json['idAccount'],
       user: UserModel.fromJson(json['user']),
       subtotal: json['subtotal'],
-      tipPercentage: json['tip_percentage'],
-      tip: json['tip'],
-      taxPercentage: json['tax_percentage'],
-      tax: json['tax'],
-      total: json['total'],
+      //tipPercentage: json['tip_percentage'],
+      //tip: json['tip'],
+      //taxPercentage: json['tax_percentage'],
+      //tax: json['tax'],
+      //total: json['total'],
       listOrder: lst,
     );
   }
 
   Map<String, dynamic> toJson() => {
         "user": {"uid": user!.uid},
+        "status": status,
         "reservation": {"idReservation": reservation!.idReservation},
   };
   Map<String, dynamic> toJsonConfirm() {
@@ -57,4 +60,14 @@ class AccountModel {
         "subtotal": subtotal,
     };
   }
+  /*Map<String, dynamic> toJsonCollecting() {
+    List list = listOrder!.map((e) => e.toJsonConfirm()).toList();
+    return {
+        "idAccount":idAccount,
+        "listOrder": list,
+        "total": total,
+        "tip":tip,
+        "tipPercemtage":tipPercentage,
+    };
+  }*/
 }

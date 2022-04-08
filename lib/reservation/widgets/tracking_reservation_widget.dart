@@ -83,7 +83,7 @@ class _TrackingReservationWidgetState extends State<TrackingReservationWidget> {
         if(state is OrderReservationListLoaded){   
           int cont = 0;
           for (var item in state.dishesOrderReservationList!) {
-            if(item.orderReservation!.status == OrderStatus.delivered.name){
+            if(item.orderReservation!.status == OrderReservationStatus.delivered.name){
               cont++;
             }
           }

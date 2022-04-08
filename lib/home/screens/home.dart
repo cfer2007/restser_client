@@ -42,12 +42,12 @@ class _HomeState extends State<Home> {
         }
       });
 
-      if(action == 'ORDER_SETTED') {
+      /*if(action == 'ORDER_SETTED') {
         Navigator.of(context).pushNamed('/confirm_reservation_screen', arguments: id);
       }
       if(action == 'RESERVATION_SETTED') {
         Navigator.of(context).pushNamed('/menu',arguments: id);
-      }
+      }*/
     });
   }
 
